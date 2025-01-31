@@ -1,4 +1,4 @@
-import { HiAnime, AnimeServers } from 'aniwatch';
+import { HiAnime, AnimeServers } from 'aniwatch'; // Manually export AnimeServers type in node_modules
 import { Request, Response } from 'express';
 
 const anime = new HiAnime.Scraper();

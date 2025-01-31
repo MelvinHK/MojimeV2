@@ -3,6 +3,6 @@ import { getEpisodeSources } from './controllers/animeController';
 
 const router = express.Router();
 
-router.get('/source', getEpisodeSources);
+router.get('/sources', getEpisodeSources);
 
 export default router;
