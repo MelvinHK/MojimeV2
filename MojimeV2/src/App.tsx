@@ -1,6 +1,7 @@
 import VideoPlayer from "./components/VideoPlayer"
 import { useQuery } from "@tanstack/react-query"
 import { getEpisodeSources } from "./api"
+import SearchBar from "./components/SearchBar";
 
 function App() {
   const { data, status, error } = useQuery({
@@ -20,7 +21,8 @@ function App() {
 
   return (
     <>
-      <VideoPlayer source={data.sources[0].url} />
+      <SearchBar />
+      <VideoPlayer source={data.source} subtitles={data.subtitles} />
     </>
   )
 }

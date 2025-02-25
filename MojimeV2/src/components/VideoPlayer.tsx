@@ -1,30 +1,20 @@
-import { useRef, useEffect } from "react";
-import Hls from 'hls.js';
+import '@vidstack/react/player/styles/base.css';
+import '../styles/video/captions.css';
+import { Captions, MediaPlayer, MediaProvider, Track } from '@vidstack/react';
 
 interface VideoPlayerProps {
-  source: string
+  source: string,
+  subtitles: string,
 }
 
 function VideoPlayer(props: VideoPlayerProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const hlsRef = useRef<Hls | null>(null); // Holds the Hls instance
-
-  useEffect(() => {
-    if (videoRef.current && Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(props.source);
-      hls.attachMedia(videoRef.current);
-      hlsRef.current = hls;
-
-      return () => {
-        hlsRef.current && hlsRef.current.destroy();
-      };
-    }
-  }, [props.source]);
-
-
   return (
-    <video ref={videoRef} controls></video>
+    <MediaPlayer src={props.source} playsInline crossOrigin>
+      <MediaProvider>
+        <Track src={props.subtitles} kind="subtitles" label="English" type="vtt" default />
+      </MediaProvider>
+      <Captions className="media-captions" />
+    </MediaPlayer>
   )
 }
 
