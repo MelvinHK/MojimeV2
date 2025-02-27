@@ -5,6 +5,7 @@
   --cue-shadow: 
     0 0 0.15em black,
     0 0 0.15em black,
+    0 0 0.15em black,
     0 0 0.15em black;
   --cue-font-size: calc(var(--overlay-height) / 100 * 4.5);
   --cue-line-height: calc(var(--cue-font-size) * 1.2);

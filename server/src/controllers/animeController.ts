@@ -9,13 +9,20 @@ interface SourceQuery {
   category?: "sub" | "dub" | "raw";
 }
 
+interface Track {
+  file: string,
+  label: string,
+  kind: string,
+  default: boolean
+}
+
 export const getEpisodeSources = async (req: Request<{}, {}, {}, SourceQuery>, res: Response) => {
   try {
     const { id, server, category } = req.query;
     const data: any = await anime.getEpisodeSources(id, server, category);
     res.json({
       source: data.sources[0].url,
-      subtitles: data.tracks[0].file
+      subtitles: data.tracks.find((track: Track) => track.label === 'English').file
     });
   } catch (error) {
     console.log(error);

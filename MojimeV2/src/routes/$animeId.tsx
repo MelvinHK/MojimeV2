@@ -1,12 +1,16 @@
-import VideoPlayer from "./components/VideoPlayer"
+import { createFileRoute } from '@tanstack/react-router'
+import VideoPlayer from "../components/VideoPlayer"
 import { useQuery } from "@tanstack/react-query"
-import { getEpisodeSources } from "./api"
-import SearchBar from "./components/SearchBar";
+import { getEpisodeSources } from "../lib/api"
 
-function App() {
+export const Route = createFileRoute('/$animeId')({
+  component: $AnimeId,
+})
+
+function $AnimeId() {
   const { data, status, error } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getEpisodeSources("steinsgate-3?ep=230"),
+    queryFn: () => getEpisodeSources("bocchi-the-rock-17479?ep=95538"),
   })
 
   if (status === 'pending') {
@@ -20,11 +24,6 @@ function App() {
   }
 
   return (
-    <>
-      <SearchBar />
       <VideoPlayer source={data.source} subtitles={data.subtitles} />
-    </>
   )
 }
-
-export default App
