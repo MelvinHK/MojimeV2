@@ -32,7 +32,9 @@
 }
 
 .media-button[data-paused] .pause-icon,
-.media-button:not([data-paused]) .play-icon {
+.media-button:not([data-paused]) .play-icon,
+.media-button[data-active] .fs-enter-icon,
+.media-button:not([data-active]) .fs-exit-icon {
   display: none;
 }
 

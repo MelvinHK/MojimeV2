@@ -13,7 +13,6 @@
   --cue-padding-y: calc(var(--cue-font-size) * 0.4);
   position: absolute;
   inset: 0;
-  z-index: 1;
   contain: layout style;
   margin: var(--overlay-padding);
   font-size: var(--cue-font-size);
