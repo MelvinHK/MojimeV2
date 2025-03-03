@@ -24,6 +24,6 @@ function $AnimeId() {
   }
 
   return (
-      <VideoPlayer source={data.source} subtitles={data.subtitles} />
+      <VideoPlayer m3u8URL={data.source} vttURL={data.subtitles} />
   )
 }

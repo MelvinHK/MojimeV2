@@ -1,0 +1,17 @@
+.video-player {
+  border-radius: 4px;
+}
+
+.controls-layout {
+  padding: 15px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  bottom: 0;
+  width: 100%;
+}
+
+.buttons-layout {
+  display: flex;
+  align-items: center;
+}

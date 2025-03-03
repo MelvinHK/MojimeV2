@@ -1,19 +1,22 @@
 import '@vidstack/react/player/styles/base.css';
 import '../styles/video/captions.css';
+import '../styles/video/video.css';
 import { Captions, MediaPlayer, MediaProvider, Track } from '@vidstack/react';
+import ControlsLayout from './VideoPlayer/ControlsLayout';
 
 interface VideoPlayerProps {
-  source: string,
-  subtitles: string,
+  m3u8URL: string,
+  vttURL: string,
 }
 
-function VideoPlayer(props: VideoPlayerProps) {
+function VideoPlayer({ m3u8URL, vttURL }: VideoPlayerProps) {
   return (
-    <MediaPlayer src={props.source} playsInline crossOrigin>
+    <MediaPlayer src={m3u8URL} className="video-player" playsInline crossOrigin>
       <MediaProvider>
-        <Track src={props.subtitles} kind="subtitles" label="English" type="vtt" default />
+        <Track src={vttURL} kind="subtitles" label="English" type="vtt" default />
       </MediaProvider>
       <Captions className="media-captions" />
+      <ControlsLayout />
     </MediaPlayer>
   )
 }
