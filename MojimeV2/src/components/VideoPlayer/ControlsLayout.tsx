@@ -3,19 +3,20 @@ import PausePlayButton from './PausePlayBtn';
 import TimeGroup from './TimeGroup';
 import FullscreenBtn from './FullscreenBtn';
 import VolumeBtn from './VolumeBtn';
+import { Controls } from '@vidstack/react';
 
 function ControlsLayout() {
   return (
-    <div className="controls-layout">
+    <Controls.Root className="controls-layout">
       <ProgressBar />
-      <div className="buttons-layout">
+      <Controls.Group className="buttons-layout">
         <PausePlayButton />
         <TimeGroup />
         <div className='spacer'></div>
         <VolumeBtn />
         <FullscreenBtn />
-      </div>
-    </div>
+      </Controls.Group>
+    </Controls.Root>
   )
 }
 

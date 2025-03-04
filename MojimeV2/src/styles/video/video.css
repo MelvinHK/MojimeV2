@@ -13,12 +13,27 @@
 }
 
 .controls-layout {
-  padding: 15px;
+  padding: 15px !important;
   position: absolute;
   display: flex;
   flex-direction: column;
+  opacity: 0;
   bottom: 0;
   width: 100%;
+}
+
+.controls-layout[data-visible] {
+  visibility: visible;
+  opacity: 1;
+  background-image: linear-gradient(
+    transparent,
+    rgb(0 0 0 / 0.4)
+  );
+}
+
+.controls-layout:not([data-visible]) {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .buttons-layout {
