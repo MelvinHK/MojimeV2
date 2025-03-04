@@ -11,7 +11,12 @@ interface VideoPlayerProps {
 
 function VideoPlayer({ m3u8URL, vttURL }: VideoPlayerProps) {
   return (
-    <MediaPlayer src={m3u8URL} className="video-player" playsInline crossOrigin>
+    <MediaPlayer
+      src={m3u8URL}
+      className="video-player"
+      playsInline
+      crossOrigin
+    >
       <MediaProvider>
         <Track src={vttURL} kind="subtitles" label="English" type="vtt" default />
       </MediaProvider>

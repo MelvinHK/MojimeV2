@@ -4,6 +4,7 @@ import TimeGroup from './TimeGroup';
 import FullscreenBtn from './FullscreenBtn';
 import VolumeBtn from './VolumeBtn';
 import { Controls } from '@vidstack/react';
+import QualityBtn from './QualityBtn';
 
 function ControlsLayout() {
   return (
@@ -13,6 +14,7 @@ function ControlsLayout() {
         <PausePlayButton />
         <TimeGroup />
         <div className='spacer'></div>
+        <QualityBtn />
         <VolumeBtn />
         <FullscreenBtn />
       </Controls.Group>

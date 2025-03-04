@@ -51,10 +51,6 @@
 .media-time {
   display: inline-block;
   contain: content;
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.025em;
-  color: white;
 }
 
 .media-time-divider {
