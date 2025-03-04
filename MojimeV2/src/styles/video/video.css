@@ -7,25 +7,9 @@
 }
 
 .media-menu {
-  position: absolute;
-  visibility: hidden;
-  display: flex !important;
   backdrop-filter: var(--popup-blur);
   background-color: var(--popup-color);
   border-radius: var(--video-b-radius);
-  opacity: 0;
-}
-
-.media-menu[data-open] {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.1s ease-in;
-}
-
-.media-menu:not([data-open]) {
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.5s ease-out;
 }
 
 .controls-layout {
