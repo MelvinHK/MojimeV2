@@ -1,4 +1,4 @@
-import '../../styles/video/progress.css'
+import '../../styles/video/video.css'
 import { Time } from "@vidstack/react";
 
 function TimeGroup() {

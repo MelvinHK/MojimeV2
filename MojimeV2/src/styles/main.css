@@ -1,1 +1,13 @@
-/* For global styling layouts */
+/* For global styling layouts, general utility classes */
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.spacer {
+  margin: auto;
+}

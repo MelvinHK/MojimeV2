@@ -1,5 +1,5 @@
 import { TimeSlider } from "@vidstack/react"
-import '../../styles/video/progress.css'
+import '../../styles/video/mediaSlider.css'
 
 function ProgressBar() {
   return (

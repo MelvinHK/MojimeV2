@@ -2,6 +2,7 @@ import ProgressBar from './ProgressBar';
 import PausePlayButton from './PausePlayBtn';
 import TimeGroup from './TimeGroup';
 import FullscreenBtn from './FullscreenBtn';
+import VolumeBtn from './VolumeBtn';
 
 function ControlsLayout() {
   return (
@@ -10,6 +11,8 @@ function ControlsLayout() {
       <div className="buttons-layout">
         <PausePlayButton />
         <TimeGroup />
+        <div className='spacer'></div>
+        <VolumeBtn />
         <FullscreenBtn />
       </div>
     </div>
