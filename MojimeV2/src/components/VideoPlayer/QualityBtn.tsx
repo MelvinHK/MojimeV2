@@ -12,8 +12,8 @@ function QualityBtn() {
     hint = currentQualityHeight ? `${currentQualityHeight}p` : '';
 
   useEffect(() => {
-    if (!options) return;
-    
+    if (options.length === 0) return;
+
     remote.changeQuality(options.length - 1);
   }, [options]);
 
