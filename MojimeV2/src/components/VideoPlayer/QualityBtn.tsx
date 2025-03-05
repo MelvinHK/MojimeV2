@@ -1,13 +1,35 @@
-import { useRef } from "react";
-import { useMediaStore, MediaPlayerInstance } from "@vidstack/react";
+import { useEffect } from 'react';
+import '../../styles/video/mediaButton.css'
+import '../../styles/video/video.css'
+
+import { Menu, useVideoQualityOptions, useMediaRemote } from "@vidstack/react";
 
 function QualityBtn() {
-  const player = useRef<MediaPlayerInstance>(null);
+  const remote = useMediaRemote();
 
-  const { qualities, quality } = useMediaStore(player);
+  const options = useVideoQualityOptions({ auto: false, sort: 'descending' }),
+    currentQualityHeight = options.selectedQuality?.height,
+    hint = currentQualityHeight ? `${currentQualityHeight}p` : '';
 
-  return (qualities.length > 0 &&
-    <div>{quality ? `${quality.height}p` : "X_x"}</div>
+  useEffect(() => {
+    if (!options) return;
+    
+    remote.changeQuality(options.length - 1);
+  }, [options]);
+
+  return (options.length > 0 &&
+    <Menu.Root>
+      <Menu.Button className="media-button quality-button"><u>{hint}</u></Menu.Button>
+      <Menu.Items className="media-menu" placement="top" offset={40}>
+        <Menu.RadioGroup value={options.selectedValue}>
+          {options.map(({ label, value, select }) => (
+            <Menu.Radio className="media-radio-button" onSelect={select} value={value} key={value}>
+              <div>{label}</div>
+            </Menu.Radio>
+          ))}
+        </Menu.RadioGroup>
+      </Menu.Items>
+    </Menu.Root>
   )
 }
 
