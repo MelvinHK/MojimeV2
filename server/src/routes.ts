@@ -1,8 +1,9 @@
 import express from 'express';
-import { getEpisodeSources } from './controllers/animeController';
+import { getEpisodeList, getEpisodeSource } from './controllers/animeController';
 
 const router = express.Router();
 
-router.get('/sources', getEpisodeSources);
+router.get('/source', getEpisodeSource); // ?id=&server=&category=
+router.get('/episodes', getEpisodeList); // ?id=
 
 export default router;
