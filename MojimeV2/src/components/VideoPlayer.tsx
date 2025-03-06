@@ -6,7 +6,7 @@ import ControlsLayout from './VideoPlayer/ControlsLayout';
 
 interface VideoPlayerProps {
   m3u8URL: string,
-  vttURL: string,
+  vttURL?: string,
 }
 
 function VideoPlayer({ m3u8URL, vttURL }: VideoPlayerProps) {
@@ -18,7 +18,7 @@ function VideoPlayer({ m3u8URL, vttURL }: VideoPlayerProps) {
       crossOrigin
     >
       <MediaProvider>
-        <Track src={vttURL} kind="subtitles" label="English" type="vtt" default />
+        {vttURL && <Track src={vttURL} kind="subtitles" label="English" type="vtt" default />}
       </MediaProvider>
       <Captions className="media-captions" />
       <ControlsLayout />

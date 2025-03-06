@@ -2,7 +2,7 @@
  * The returned data structure of some functions in aniwatch do not match their declared type,
  * or some important types are missing because they weren't exported by the authour.
  * 
- * This file adds/corrects those types.
+ * This module adds/corrects those types.
  */
 
 declare module 'aniwatch-fixed' {

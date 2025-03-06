@@ -10,7 +10,7 @@ export const Route = createFileRoute('/$animeId')({
 function $AnimeId() {
   const { data, status, error } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getEpisodeSource("bocchi-the-rock-17479?ep=95538"),
+    queryFn: () => getEpisodeSource("bocchi-the-rock-17479?ep=95538"), 
   });
 
   if (status === 'pending') {
