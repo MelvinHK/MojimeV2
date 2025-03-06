@@ -1,6 +1,6 @@
 /**
  * The returned data structure of some functions in aniwatch do not match their declared type,
- * or some important types are missing because they weren't exported by the authour.
+ * or, some useful types weren't exported by the author.
  * 
  * This module adds/corrects those types.
  */

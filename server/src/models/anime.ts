@@ -1,11 +1,3 @@
-import { AnimeServers } from "aniwatch-fixed";
-
-export interface SourceQuery {
-  id: string;
-  server?: AnimeServers;
-  category?: "sub" | "dub" | "raw";
-}
-
 export interface Source {
   source: string,
   subtitles?: string

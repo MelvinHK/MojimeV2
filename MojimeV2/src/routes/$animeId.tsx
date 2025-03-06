@@ -1,29 +1,48 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useParams } from '@tanstack/react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import { useQuery } from "@tanstack/react-query"
-import { getEpisodeSource } from "../lib/api"
+import { getEpisodeList, getEpisodeSourceByID } from "../lib/api"
+import { useState } from 'react'
+import { Episode } from '../../../server/src/models/anime'
 
 export const Route = createFileRoute('/$animeId')({
   component: $AnimeId,
 })
 
 function $AnimeId() {
-  const { data, status, error } = useQuery({
-    queryKey: ['sources'],
-    queryFn: () => getEpisodeSource("bocchi-the-rock-17479?ep=95538"), 
+  const { animeId } = useParams({ strict: false });
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const { data: episodeList } = useQuery({
+    queryKey: ['EpisodeList', animeId],
+    queryFn: () => {
+      console.log('fetching episodeList')
+      if (animeId)
+        return getEpisodeList(animeId)
+    },
+    placeholderData: episodeList => episodeList
   });
 
-  if (status === 'pending') {
-    console.log('loading...');
-    return;
+  const { data: episode } = useQuery({
+    queryKey: ['Episode', currentIndex],
+    queryFn: () => {
+      console.log('fetching episode source')
+      if (episodeList)
+        return getEpisodeSourceByID(episodeList.episodes[currentIndex].id)
+    },
+    placeholderData: episode => episode,
+    enabled: !!episodeList?.episodes?.length,
+  });
+
+  const getIndexByEpisodeNumber = (epNo: number | string) => {
+    return !episodeList ? -1 :
+      episodeList.episodes.findIndex((episode: Episode) => String(episode.number) === String(epNo));
   }
 
-  if (status === 'error') {
-    console.log(error);
-    return;
-  }
-
-  return (
-    <VideoPlayer m3u8URL={data.source} vttURL={data.subtitles} />
-  )
+  return (episode && <>
+    <VideoPlayer m3u8URL={episode.source} vttURL={episode.subtitles} />
+    <button onClick={() => setCurrentIndex(currentIndex + 1)}>Next</button>
+    <button onClick={() => setCurrentIndex(currentIndex - 1)}>Prev</button>
+    <button onClick={() => setCurrentIndex(getIndexByEpisodeNumber(8))}>Jump</button>
+  </>)
 }
