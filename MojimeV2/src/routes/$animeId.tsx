@@ -41,7 +41,6 @@ function $AnimeId() {
 
   return episode && (<>
     <VideoPlayer
-      key={episode.subtitles}
       m3u8URL={episode.source}
       vttURL={episode.subtitles}
       episodeIndex={{ currentIndex, setCurrentIndex }}

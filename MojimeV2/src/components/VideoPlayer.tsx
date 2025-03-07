@@ -30,6 +30,7 @@ function VideoPlayer({ m3u8URL, vttURL, episodeIndex: { currentIndex, setCurrent
   return (
     <MediaPlayer
       ref={playerRef}
+      key={m3u8URL}
       src={m3u8URL}
       className="video-player"
       playsInline
