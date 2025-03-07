@@ -39,7 +39,7 @@ function $AnimeId() {
       episodeList.episodes.findIndex((episode: Episode) => String(episode.number) === String(epNo));
   }
 
-  return (episode && <>
+  return episode && (<>
     <VideoPlayer m3u8URL={episode.source} vttURL={episode.subtitles} />
     <button onClick={() => setCurrentIndex(currentIndex + 1)}>Next</button>
     <button onClick={() => setCurrentIndex(currentIndex - 1)}>Prev</button>

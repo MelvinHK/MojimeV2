@@ -13,7 +13,6 @@ function QualityBtn() {
 
   useEffect(() => {
     if (options.length === 0) return;
-
     remote.changeQuality(options.length - 1);
   }, [options]);
 
