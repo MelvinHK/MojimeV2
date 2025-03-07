@@ -44,3 +44,10 @@ export async function getEpisodeListAndSource(
   const listAndSource = await axios.get(`${baseURL}/episodesAndSource?${params.toString()}`);
   return listAndSource.data;
 }
+
+export async function getVtt(url: string) {
+  const response = await axios.get(url, { responseType: 'text' })
+  const vttContent = response.data;
+  const blob = new Blob([vttContent], { type: 'text/vtt' });
+  return { content: vttContent, url: URL.createObjectURL(blob) };
+}

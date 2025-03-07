@@ -40,9 +40,11 @@ function $AnimeId() {
   }
 
   return episode && (<>
-    <VideoPlayer m3u8URL={episode.source} vttURL={episode.subtitles} />
-    <button onClick={() => setCurrentIndex(currentIndex + 1)}>Next</button>
-    <button onClick={() => setCurrentIndex(currentIndex - 1)}>Prev</button>
-    <button onClick={() => setCurrentIndex(getIndexByEpisodeNumber(8))}>Jump</button>
+    <VideoPlayer
+      key={episode.subtitles}
+      m3u8URL={episode.source}
+      vttURL={episode.subtitles}
+      episodeIndex={{ currentIndex, setCurrentIndex }}
+    />
   </>)
 }
