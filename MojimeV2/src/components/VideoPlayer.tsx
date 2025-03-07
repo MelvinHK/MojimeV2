@@ -16,7 +16,6 @@ interface VideoPlayerProps {
 
 function VideoPlayer({ m3u8URL, vttURL, episodeIndex: { currentIndex, setCurrentIndex } }: VideoPlayerProps) {
   const playerRef = useRef<MediaPlayerInstance>(null);
-  const initialLoad = useRef(true);
 
   // Player configuration
   useEffect(() => {
@@ -24,7 +23,6 @@ function VideoPlayer({ m3u8URL, vttURL, episodeIndex: { currentIndex, setCurrent
     if (!player) return;
 
     player.qualities.switch = "next";
-    initialLoad.current = false;
   }, []);
 
   return (
