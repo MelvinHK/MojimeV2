@@ -32,6 +32,7 @@ function $AnimeId() {
     },
     placeholderData: episode => episode,
     enabled: !!episodeList?.episodes?.length,
+    staleTime: Infinity
   });
 
   const getIndexByEpisodeNumber = (epNo: number | string) => {

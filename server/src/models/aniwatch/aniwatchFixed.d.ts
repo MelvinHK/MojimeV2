@@ -8,6 +8,8 @@
 declare module 'aniwatch-fixed' {
   type AnimeServers = "hd-1" | "hd-2" | "megacloud" | "streamsb" | "streamtape";
 
+  type Category = "sub" | "dub" | "raw";
+
   interface Track {
     file: string,
     label: string,
@@ -20,15 +22,15 @@ declare module 'aniwatch-fixed' {
     type: string
   }
 
-  interface IntroOutro {
+  interface Segment {
     start: number,
     end: number
   }
 
   interface ScrapedAnimeEpisodesSources {
     tracks: Track[],
-    intro: IntroOutro,
-    outro: IntroOutro,
+    intro: Segment,
+    outro: Segment,
     sources: Source[],
     anilistID: number | null,
     malID: number | null
