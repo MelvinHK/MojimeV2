@@ -1,9 +1,14 @@
-.video-player {
+.vp-container {
   --video-b-radius: 4px;
   --popup-color: rgba(0, 0, 0, 0.555);
   --popup-blur: blur(1px);
 
-  border-radius: var(--video-b-radius);
+  position: relative;
+  background-color: black;
+}
+
+.video-player {
+  height:100%;
 }
 
 .media-menu {
@@ -29,6 +34,12 @@
     transparent,
     rgb(0 0 0 / 0.4)
   );
+}
+
+.fallback.controls-layout {
+  box-sizing: border-box;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .controls-layout:not([data-visible]) {

@@ -11,11 +11,6 @@ function QualityBtn() {
     currentQualityHeight = options.selectedQuality?.height,
     hint = currentQualityHeight ? `${currentQualityHeight}p` : '';
 
-  useEffect(() => {
-    if (options.length === 0) return;
-    remote.changeQuality(options.length - 1);
-  }, [options]);
-
   return (options.length > 0 &&
     <Menu.Root>
       <Menu.Button className="media-button quality-button"><u>{hint}</u></Menu.Button>
