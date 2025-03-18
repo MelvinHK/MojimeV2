@@ -1,7 +1,7 @@
 import '@vidstack/react/player/styles/base.css';
 import '../styles/video/captions.css';
 import '../styles/video/video.css';
-import { MediaPlayer, MediaPlayerInstance } from '@vidstack/react';
+import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
 import ControlsLayout from './VideoPlayer/ControlsLayout';
 import { useEffect, useRef, createContext } from 'react';
 
@@ -34,24 +34,28 @@ function VideoPlayer({ m3u8URL, episodeIndex: { currentIndex, setCurrentIndex } 
     if (!player) return;
 
     player.qualities.switch = "next";
+
+    console.log(m3u8URL)
   }, []);
 
   return (
-    <div className="vp-container">
-      <VPContext.Provider value={VPContextValues}>
-        <MediaPlayer
-          ref={playerRef}
-          src={m3u8URL}
-          className="video-player"
-          load="eager"
-          playsInline
-          autoPlay
-          crossOrigin
-        >
-          <ControlsLayout />
-        </MediaPlayer>
-      </VPContext.Provider>
-    </div>
+    <VPContext.Provider value={VPContextValues}>
+      <MediaPlayer
+        ref={playerRef}
+        className="video-player"
+        src={{
+          src: m3u8URL,
+          type: 'application/x-mpegurl'
+        }}
+        load="eager"
+        playsInline
+        autoPlay
+        crossOrigin
+      >
+        <MediaProvider />
+        <ControlsLayout />
+      </MediaPlayer>
+    </VPContext.Provider>
   )
 }
 

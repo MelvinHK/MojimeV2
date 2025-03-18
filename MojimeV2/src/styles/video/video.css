@@ -1,14 +1,7 @@
-.vp-container {
+.video-player {
   --video-b-radius: 4px;
   --popup-color: rgba(0, 0, 0, 0.555);
   --popup-blur: blur(1px);
-
-  position: relative;
-  background-color: black;
-}
-
-.video-player {
-  height:100%;
 }
 
 .media-menu {

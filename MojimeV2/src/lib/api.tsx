@@ -8,11 +8,10 @@ export async function getEpisodeList(id: string) {
 }
 
 export async function getEpisodeSource(id: string) {
-  const source = await axios.get(`${baseURL}/episode/sources?=${id}`);
+  const source = await axios.get(`${baseURL}/episode/sources?episodeId=${id}`);
   return source.data;
 }
 
-export async function getProxy(url: string) {
-  const proxy = await axios.get(`${baseURL}/proxy?=${url}&rewrite=qualities`);
-  return proxy.data;
+export function proxySource(url: string) {
+  return `${baseURL}/proxy?url=${url}&rewrite=qualities`;
 }
