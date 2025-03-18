@@ -1,7 +1,7 @@
 import { createFileRoute, useParams } from '@tanstack/react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import { useQuery } from "@tanstack/react-query"
-import { getEpisodeList, getEpisodeSourceByID } from "../lib/api"
+import { getEpisodeList, getEpisodeSource } from "../lib/api"
 import { useState } from 'react'
 import { Episode } from '../../../server/src/models/anime'
 
@@ -28,7 +28,7 @@ function $AnimeId() {
     queryFn: () => {
       console.log('fetching episode source')
       if (episodeList)
-        return getEpisodeSourceByID(episodeList.episodes[currentIndex].id)
+        return getEpisodeSource(episodeList.episodes[currentIndex].id)
     },
     placeholderData: episode => episode,
     enabled: !!episodeList?.episodes?.length,
@@ -43,7 +43,6 @@ function $AnimeId() {
   return episode && (<>
     <VideoPlayer
       m3u8URL={episode.source}
-      vttURL={episode.subtitles}
       episodeIndex={{ currentIndex, setCurrentIndex }}
     />
   </>)
