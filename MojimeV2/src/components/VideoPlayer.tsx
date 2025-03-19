@@ -1,5 +1,4 @@
 import '@vidstack/react/player/styles/base.css';
-import '../styles/video/captions.css';
 import '../styles/video/video.css';
 import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
 import ControlsLayout from './VideoPlayer/ControlsLayout';

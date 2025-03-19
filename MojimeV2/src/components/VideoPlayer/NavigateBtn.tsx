@@ -9,6 +9,7 @@ function NavigateBtn({ type }: NavigateBtnProps) {
   const { currentIndex, setCurrentIndex } = useContext(VPContext);
 
   const navigate = () => {
+    // if (currentIndex === 0 && type === "previous") return;
     setCurrentIndex(type === "next" ? currentIndex + 1 : currentIndex - 1);
   }
 

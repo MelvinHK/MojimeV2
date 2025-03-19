@@ -1,7 +1,7 @@
 import { createFileRoute, useParams } from '@tanstack/react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import { useQuery } from "@tanstack/react-query"
-import { getEpisodeList, getEpisodeSource, proxySource } from "../lib/api"
+import { getAnime, getEpisode, proxySource } from "../lib/api"
 import { useState } from 'react'
 
 export const Route = createFileRoute('/$animeId')({
@@ -12,33 +12,31 @@ function $AnimeId() {
   const { animeId } = useParams({ strict: false });
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const { data: episodeList } = useQuery({
-    queryKey: ['EpisodeList', animeId],
+  const { data: anime } = useQuery({
+    queryKey: ['Anime', animeId],
     queryFn: async () => {
-      console.log('fetching episodeList')
       if (animeId) {
-        const list = await getEpisodeList(animeId);
-        console.log("list:", list)
+        const list = await getAnime(animeId);
         return list;
       }
     },
-    placeholderData: episodeList => episodeList
+    staleTime: 0,
+    gcTime: Infinity
   });
 
   const { data: episode } = useQuery({
     queryKey: ['Episode', currentIndex],
     queryFn: async () => {
-      console.log('fetching episode source')
-      if (episodeList) {
-        const source = await getEpisodeSource(episodeList[currentIndex].id);
+      if (anime) {
+        const source = await getEpisode(anime.episodes[currentIndex].id);
         const proxy = proxySource(source.url);
-        console.log("source", proxy)
         return proxy;
       }
     },
     placeholderData: episode => episode,
-    enabled: !!episodeList,
-    staleTime: Infinity
+    enabled: !!anime,
+    staleTime: Infinity,
+    gcTime: 60 * 60 * 1000
   });
 
   // const getIndexByEpisodeNumber = (epNo: number | string) => {
@@ -46,10 +44,14 @@ function $AnimeId() {
   //     episodeList.episodes.findIndex((episode: any) => String(episode.number) === String(epNo));
   // }
 
-  return episode && (<>
+  if (!anime || !episode) return;
+
+  return (<>
     <VideoPlayer
       m3u8URL={episode}
       episodeIndex={{ currentIndex, setCurrentIndex }}
     />
+    <p>{anime.title}</p>
+    <div>{anime.episodes[currentIndex].number} / {anime.totalEpisodes}</div>
   </>)
 }
