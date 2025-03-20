@@ -4,11 +4,17 @@ import '../../styles/video/mediaButton.css'
 import { VolumeSlider, Menu, VolumeSliderInstance, useStore } from '@vidstack/react';
 import { useRef, useMemo } from 'react';
 
+export const PREFERRED_VOLUME_KEY = "preferredVolume";
+
 function VolumeBtn() {
   const volumeRef = useRef<VolumeSliderInstance>(null),
     { value } = useStore(VolumeSliderInstance, volumeRef);
 
   const roundedValue = useMemo(() => Number((value * 0.1).toFixed(0)), [value])
+
+  const preferVolume = (value: number) => {
+    localStorage.setItem(PREFERRED_VOLUME_KEY, String(value));
+  }
 
   return (
     <Menu.Root>
@@ -30,7 +36,7 @@ function VolumeBtn() {
       </Menu.Button>
       <Menu.Items className="volume-slider-container media-menu" placement="top" offset={40}>
         <div>{roundedValue}</div>
-        <VolumeSlider.Root ref={volumeRef} className="media-slider" orientation="vertical">
+        <VolumeSlider.Root ref={volumeRef} className="media-slider" orientation="vertical" onDragEnd={preferVolume}>
           <VolumeSlider.Track className="media-slider-track">
             <VolumeSlider.TrackFill className="media-slider-track-fill media-slider-track" />
           </VolumeSlider.Track>

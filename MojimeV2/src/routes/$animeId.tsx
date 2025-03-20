@@ -3,7 +3,7 @@ import VideoPlayer from "../components/VideoPlayer"
 import { useQuery } from "@tanstack/react-query"
 import { getAnime, getEpisode, getProxyURL } from "../lib/api"
 import { useState, createContext, useEffect, useMemo } from 'react'
-import { Anime } from '../models'
+import { Anime, Episode } from '../models'
 
 interface AnimeSearchParams {
   ep: number
@@ -18,12 +18,14 @@ interface AnimeContextType {
   anime: Anime | undefined;
   currentIndex: number;
   setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
+  episode: Episode | undefined;
 }
 
 export const AnimeContext = createContext<AnimeContextType>({
   anime: undefined,
   currentIndex: 0,
-  setCurrentIndex: () => 0
+  setCurrentIndex: () => 0,
+  episode: undefined
 });
 
 function $AnimeId() {
@@ -47,7 +49,7 @@ function $AnimeId() {
   // Derive selected episode from URL param.
   // If there's no 'ep' param, default to the first episode.
   const selectedEpisode = useMemo(() => {
-    if (!anime) return null;
+    if (!anime) return undefined;
     return anime.episodes.find(episode => episode.number === episodeParam)
       || anime.episodes[0];
   }, [anime, episodeParam]);
@@ -89,7 +91,8 @@ function $AnimeId() {
       value={{
         anime: anime,
         currentIndex: currentIndex,
-        setCurrentIndex: setCurrentIndex
+        setCurrentIndex: setCurrentIndex,
+        episode: selectedEpisode
       }}
     >
       <VideoPlayer m3u8URL={episodeURL} />

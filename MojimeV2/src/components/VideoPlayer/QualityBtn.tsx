@@ -4,6 +4,8 @@ import '../../styles/video/video.css'
 
 import { Menu, useVideoQualityOptions } from "@vidstack/react";
 
+const PREFERRED_QUALITY_KEY = "preferredQuality";
+
 function QualityBtn() {
   const options = useVideoQualityOptions({ auto: false, sort: 'descending' }),
     currentQualityHeight = options.selectedQuality?.height,
@@ -12,14 +14,14 @@ function QualityBtn() {
   useEffect(() => {
     if (options.length === 0) return;
 
-    const preferredQuality = localStorage.getItem("preferredQuality");
+    const preferredQuality = localStorage.getItem(PREFERRED_QUALITY_KEY);
     const pqIndex = options.findIndex(option => option.label === preferredQuality);
 
     options[pqIndex !== -1 ? pqIndex : 0].select();
   }, [options])
 
   const preferQuality = (label: string) => {
-    localStorage.setItem("preferredQuality", label);
+    localStorage.setItem(PREFERRED_QUALITY_KEY, label);
   }
 
   return options.length > 0 && (

@@ -18,9 +18,14 @@
 }
 
 .video-title {
-  padding: 7.5px 15px !important;
+  padding: 10px 15px !important;
   position: absolute;
   top: 0;
+}
+
+.video-player:has(.controls-layout:not([data-visible])) .video-title,
+.video-player:not([data-fullscreen]) .video-title {
+  opacity: 0;
 }
 
 .controls-layout {
@@ -37,10 +42,8 @@
 .controls-layout[data-visible] {
   visibility: visible;
   opacity: 1;
-  background-image: linear-gradient(
-    transparent,
-    rgb(0 0 0 / 0.4)
-  );
+  background-image: linear-gradient(transparent,
+      rgb(0 0 0 / 0.4));
 }
 
 .fallback.controls-layout {

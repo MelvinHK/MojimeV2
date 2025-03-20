@@ -2,13 +2,15 @@ import '@vidstack/react/player/styles/base.css';
 import '../styles/video/video.css';
 import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
 import ControlsLayout from './VideoPlayer/ControlsLayout';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
+import { AnimeContext } from '../routes/$animeId';
 
 interface VideoPlayerProps {
   m3u8URL: string,
 }
 
 function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
+  const { anime, episode } = useContext(AnimeContext);
   const playerRef = useRef<MediaPlayerInstance>(null);
 
   // Player configuration
@@ -33,7 +35,7 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
       crossOrigin
     >
       <MediaProvider />
-      <div className='video-title'>yo</div>
+      <div className='video-title'>{anime?.title ?? ""} {"\n"} - Episode {episode?.number}</div>
       <ControlsLayout />
     </MediaPlayer>
   )
