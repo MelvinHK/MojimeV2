@@ -33,6 +33,7 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
       crossOrigin
     >
       <MediaProvider />
+      <div className='video-title'>yo</div>
       <ControlsLayout />
     </MediaPlayer>
   )

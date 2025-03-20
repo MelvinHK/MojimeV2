@@ -1,7 +1,7 @@
 import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import { useQuery } from "@tanstack/react-query"
-import { getAnime, getEpisode, proxySource } from "../lib/api"
+import { getAnime, getEpisode, getProxyURL } from "../lib/api"
 import { useState, createContext, useEffect } from 'react'
 import { Anime } from '../models'
 
@@ -37,23 +37,24 @@ function $AnimeId() {
     queryKey: ['Anime', animeId],
     queryFn: async () => {
       if (animeId) {
-        const list = await getAnime(animeId);
-        return list;
+        return await getAnime(animeId);
       }
     },
     staleTime: 0,
     gcTime: Infinity
   });
 
-  const { data: episode } = useQuery({
+  const { data: episode } = useQuery({ // This is executing twice for some reason, and not due to React.StrictMode
     queryKey: ['Episode', ep, animeId],
     queryFn: async () => {
       if (anime) {
         const index = ep ? getIndexByEpisodeNumber(ep) : 0;
         const source = await getEpisode(anime.episodes[index].id);
-        navigate({ search: () => ({ ep: anime.episodes[index].number }) })
-        const proxy = proxySource(source.url);
-        return proxy;
+        navigate({
+          search: () => ({ ep: anime.episodes[index].number }),
+          replace: !ep
+        })
+        return getProxyURL(source.url);
       }
     },
     placeholderData: episode => episode,

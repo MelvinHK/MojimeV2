@@ -3,12 +3,24 @@
   --popup-color: rgba(0, 0, 0, 0.555);
   --popup-blur: blur(1px);
   background-color: black;
+  max-width: 60rem;
+  border-radius: var(--video-b-radius);
+}
+
+.video-player[data-fullscreen] {
+  border-radius: 0;
 }
 
 .media-menu {
   backdrop-filter: var(--popup-blur);
   background-color: var(--popup-color);
   border-radius: var(--video-b-radius);
+}
+
+.video-title {
+  padding: 7.5px 15px !important;
+  position: absolute;
+  top: 0;
 }
 
 .controls-layout {
@@ -19,6 +31,7 @@
   opacity: 0;
   bottom: 0;
   width: 100%;
+  border-radius: var(--video-b-radius);
 }
 
 .controls-layout[data-visible] {

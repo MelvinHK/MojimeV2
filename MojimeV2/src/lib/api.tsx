@@ -18,6 +18,6 @@ export async function getEpisode(id: string): Promise<Source> {
   return source.data;
 }
 
-export function proxySource(url: string) {
+export function getProxyURL(url: string) {
   return `${baseURL}/proxy?url=${url}&rewrite=qualities`;
 }
