@@ -20,3 +20,9 @@
   flex-direction: column;
   gap: 0.5rem
 }
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

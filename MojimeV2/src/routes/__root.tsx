@@ -9,7 +9,9 @@ export const Route = createRootRoute({
 function Root() {
   return (
     <React.Fragment>
-      <SearchBar />
+      <div className="header">
+        <SearchBar />
+      </div>
       <Outlet />
     </React.Fragment>
   )

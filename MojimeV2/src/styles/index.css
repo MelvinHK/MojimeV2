@@ -1,10 +1,19 @@
 /* For styling base HTML elements and global variables */
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  color: white;
-  background-color: #242424;
+  --white: rgb(238, 238, 238);
+  --gray: #353535;
+  --black: #1a1a1a;
+  --blue: #646cff;
+
+  --pad-y: 0.8rem;
+  --pad-x: 1.2rem;
+  --pad: var(--pad-y) var(--pad-x);
+
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--white);
+  background-color: var(--black);
 }
 
 a {
@@ -16,7 +25,17 @@ a:hover {
   text-decoration: underline;
 }
 
+* {
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+}
+
 button:disabled {
   opacity: 0.4;
   cursor: default;
+}
+
+input:focus {
+  outline: none;
 }

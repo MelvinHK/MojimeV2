@@ -1,3 +1,5 @@
+import '../styles/searchbar/searchbar.css';
+
 import { useQuery } from "@tanstack/react-query";
 import { FormEvent, useState } from "react"
 import { getSearch } from "../lib/api";
@@ -19,25 +21,27 @@ function SearchBar() {
     refetch();
   }
 
-  return (<>
+  return (<div className='searchbar-container'>
     <form onSubmit={handleSubmit}>
       <input
+        className='searchbar'
         value={value}
         onChange={e => setValue(e.target.value)}
         required
+        placeholder='Search'
       />
-      {isFetching && <label>Loading...</label>}
     </form>
-    {results &&
-      <div className="flex col">
-        {results?.length > 0 ?
-          results.map(result => <Link key={result.id} to={result.id}>{result.title}</Link>)
-          :
-          <div>No results</div>
-        }
-      </div>
-    }
-  </>)
+      {results &&
+        <div className="dropdown">
+          {results?.length > 0 ?
+            results.map(result => <Link key={result.id} to={result.id}>{result.title}</Link>)
+            :
+            <div>No results</div>
+          }
+          {isFetching && <label>Loading...</label>}
+        </div>
+      }
+  </div>)
 }
 
 export default SearchBar

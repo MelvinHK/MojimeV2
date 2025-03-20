@@ -1,0 +1,37 @@
+.searchbar-container {
+  padding: var(--pad);
+  z-index: 2;
+
+  --searchbar-width: 35rem;
+}
+
+.searchbar {
+  border-radius: 8px;
+  border: none;
+  padding: var(--pad);
+  width: var(--searchbar-width);
+  background-color: var(--gray);
+  color: var(--white)
+}
+
+.dropdown {
+  width: var(--searchbar-width);
+  padding: var(--pad);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pad-y);
+  background-color: var(--gray);
+  border-radius: 8px;
+}
+
+.dropdown::before {
+  content: "";
+  position: absolute;
+  background-color: var(--gray);
+  width: inherit;
+  height: 2rem;
+  top: -1rem;
+  left: 0;
+  z-index: -1;
+}
