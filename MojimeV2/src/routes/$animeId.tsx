@@ -2,7 +2,7 @@ import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import { useQuery } from "@tanstack/react-query"
 import { getAnime, getEpisode, getProxyURL } from "../lib/api"
-import { useState, createContext, useEffect } from 'react'
+import { useState, createContext, useEffect, useMemo } from 'react'
 import { Anime } from '../models'
 
 interface AnimeSearchParams {
@@ -28,7 +28,7 @@ export const AnimeContext = createContext<AnimeContextType>({
 
 function $AnimeId() {
   const { animeId } = useParams({ strict: false });
-  const { ep } = Route.useSearch();
+  const { ep: episodeParam } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -44,36 +44,47 @@ function $AnimeId() {
     gcTime: Infinity
   });
 
-  const { data: episode } = useQuery({ // This is executing twice for some reason, and not due to React.StrictMode
-    queryKey: ['Episode', ep, animeId],
+  // Derive selected episode from URL param.
+  // If there's no 'ep' param, default to the first episode.
+  const selectedEpisode = useMemo(() => {
+    if (!anime) return null;
+    return anime.episodes.find(episode => episode.number === episodeParam)
+      || anime.episodes[0];
+  }, [anime, episodeParam]);
+
+  // Sync currentIndex with the index of selected episode.
+  useEffect(() => {
+    if (!anime || !selectedEpisode) return;
+    setCurrentIndex(anime.episodes.findIndex(
+      episode => String(episode.number) === String(selectedEpisode.number)
+    ));
+  }, [anime, selectedEpisode]);
+
+  // If no ep param is present, update the URL once with the default episode.
+  useEffect(() => {
+    if (anime && !episodeParam && selectedEpisode) {
+      navigate({
+        search: () => ({ ep: selectedEpisode.number }),
+        replace: true
+      });
+    }
+  }, [anime, episodeParam, selectedEpisode, navigate]);
+
+  const { data: episodeURL } = useQuery({
+    queryKey: ['Episode', selectedEpisode?.number, animeId],
     queryFn: async () => {
-      if (anime) {
-        const index = ep ? getIndexByEpisodeNumber(ep) : 0;
-        const source = await getEpisode(anime.episodes[index].id);
-        navigate({
-          search: () => ({ ep: anime.episodes[index].number }),
-          replace: !ep
-        })
+      if (selectedEpisode) {
+        const source = await getEpisode(selectedEpisode.id);
         return getProxyURL(source.url);
       }
     },
-    placeholderData: episode => episode,
-    enabled: !!anime,
+    enabled: !!anime && !!selectedEpisode,
+    placeholderData: episodeURL => episodeURL,
     staleTime: Infinity,
     gcTime: 60 * 60 * 1000
   });
 
-  const getIndexByEpisodeNumber = (epNo: number) => {
-    return !anime?.episodes ? 0 :
-      anime.episodes.findIndex((episode: any) => String(episode.number) === String(epNo));
-  }
-
-  useEffect(() => {
-    if (!ep || !anime) return;
-    setCurrentIndex(anime.episodes.findIndex(episode => episode.number === ep))
-  }, [ep, anime])
-
-  return anime && episode && (
+  return anime && episodeURL && (
     <AnimeContext.Provider
       value={{
         anime: anime,
@@ -81,7 +92,7 @@ function $AnimeId() {
         setCurrentIndex: setCurrentIndex
       }}
     >
-      <VideoPlayer m3u8URL={episode} />
+      <VideoPlayer m3u8URL={episodeURL} />
       <p>{anime.title}</p>
       <div>{anime.episodes[currentIndex].number} / {anime.totalEpisodes}</div>
     </AnimeContext.Provider>
