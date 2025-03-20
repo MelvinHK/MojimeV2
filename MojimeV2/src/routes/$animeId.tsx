@@ -1,12 +1,17 @@
-import { createFileRoute, useParams } from '@tanstack/react-router'
+import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import { useQuery } from "@tanstack/react-query"
 import { getAnime, getEpisode, proxySource } from "../lib/api"
-import { useState, createContext } from 'react'
+import { useState, createContext, useEffect } from 'react'
 import { Anime } from '../models'
+
+interface AnimeSearchParams {
+  ep: number
+}
 
 export const Route = createFileRoute('/$animeId')({
   component: $AnimeId,
+  validateSearch: () => ({}) as AnimeSearchParams
 })
 
 interface AnimeContextType {
@@ -23,6 +28,9 @@ export const AnimeContext = createContext<AnimeContextType>({
 
 function $AnimeId() {
   const { animeId } = useParams({ strict: false });
+  const { ep } = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const { data: anime } = useQuery({
@@ -38,10 +46,12 @@ function $AnimeId() {
   });
 
   const { data: episode } = useQuery({
-    queryKey: ['Episode', currentIndex],
+    queryKey: ['Episode', ep, animeId],
     queryFn: async () => {
       if (anime) {
-        const source = await getEpisode(anime.episodes[currentIndex].id);
+        const index = ep ? getIndexByEpisodeNumber(ep) : 0;
+        const source = await getEpisode(anime.episodes[index].id);
+        navigate({ search: () => ({ ep: anime.episodes[index].number }) })
         const proxy = proxySource(source.url);
         return proxy;
       }
@@ -52,10 +62,15 @@ function $AnimeId() {
     gcTime: 60 * 60 * 1000
   });
 
-  // const getIndexByEpisodeNumber = (epNo: number | string) => {
-  //   return !episodeList ? -1 :
-  //     episodeList.episodes.findIndex((episode: any) => String(episode.number) === String(epNo));
-  // }
+  const getIndexByEpisodeNumber = (epNo: number) => {
+    return !anime?.episodes ? 0 :
+      anime.episodes.findIndex((episode: any) => String(episode.number) === String(epNo));
+  }
+
+  useEffect(() => {
+    if (!ep || !anime) return;
+    setCurrentIndex(anime.episodes.findIndex(episode => episode.number === ep))
+  }, [ep, anime])
 
   return anime && episode && (
     <AnimeContext.Provider

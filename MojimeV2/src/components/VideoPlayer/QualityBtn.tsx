@@ -13,9 +13,9 @@ function QualityBtn() {
     if (options.length === 0) return;
 
     const preferredQuality = localStorage.getItem("preferredQuality");
-    options[preferredQuality ?
-      options.findIndex(option => option.label === preferredQuality) : 0
-    ].select();
+    const pqIndex = options.findIndex(option => option.label === preferredQuality);
+
+    options[pqIndex !== -1 ? pqIndex : 0].select();
   }, [options])
 
   const preferQuality = (label: string) => {
