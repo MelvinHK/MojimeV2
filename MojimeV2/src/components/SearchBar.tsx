@@ -1,12 +1,20 @@
 import '../styles/searchbar/searchbar.css';
 
 import { useQuery } from "@tanstack/react-query";
-import { FormEvent, useState } from "react"
+import { FormEvent, useRef, useState } from "react"
 import { getSearch } from "../lib/api";
 import { Link } from "@tanstack/react-router";
+import useClickAway from '../lib/hooks/useClickAway';
 
 function SearchBar() {
   const [value, setValue] = useState("");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDropdownVisible, toggleDropdown] = useState(true);
+
+  useClickAway({
+    onClick: () => toggleDropdown(true),
+    onAway: () => toggleDropdown(false)
+  }, containerRef.current);
 
   const { data: results, refetch, isFetching } = useQuery({
     queryKey: ['Search'],
@@ -21,27 +29,41 @@ function SearchBar() {
     refetch();
   }
 
-  return (<div className='searchbar-container'>
-    <form onSubmit={handleSubmit}>
-      <input
-        className='searchbar'
-        value={value}
-        onChange={e => setValue(e.target.value)}
-        required
-        placeholder='Search'
-      />
-    </form>
-      {results &&
+  const renderDropdown = () => {
+    if (isFetching) {
+      return <label>Searching...</label>;
+    }
+
+    if (results?.length === 0) {
+      return <div>No results</div>;
+    }
+
+    return results?.map(result => (
+      <Link key={result.id} to={result.id} onClick={() => toggleDropdown(false)}>
+        {result.title}
+      </Link>
+    ));
+  };
+
+  return (
+    <div className='searchbar-container' ref={containerRef}>
+      <form onSubmit={handleSubmit}>
+        <input
+          className='searchbar'
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          required
+          placeholder='Search'
+          spellCheck={false}
+        />
+      </form>
+      {(results || isFetching) && isDropdownVisible &&
         <div className="dropdown">
-          {results?.length > 0 ?
-            results.map(result => <Link key={result.id} to={result.id}>{result.title}</Link>)
-            :
-            <div>No results</div>
-          }
-          {isFetching && <label>Loading...</label>}
+          {renderDropdown()}
         </div>
       }
-  </div>)
+    </div>
+  )
 }
 
 export default SearchBar
