@@ -5,11 +5,11 @@ const useClickAway = (
     onClick: () => void;
     onAway: () => void
   },
-  ref: HTMLElement | null
+  ref: React.RefObject<HTMLElement>
 ) => {
   useEffect(() => {
     const handleDocumentClick = (e: MouseEvent) => {
-      if (!ref?.contains(e.target as Node)) {
+      if (!ref.current?.contains(e.target as Node)) {
         options.onAway();
       } else {
         options.onClick();

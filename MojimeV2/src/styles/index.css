@@ -10,6 +10,8 @@
   --pad-x: 1.2rem;
   --pad: var(--pad-y) var(--pad-x);
 
+  --b-radius: 8px;
+
   font-family: monospace;
   font-size: 13px;
   color: var(--white);
@@ -31,9 +33,9 @@ a:hover {
   font-size: inherit;
 }
 
-button:disabled {
+:disabled {
   opacity: 0.4;
-  cursor: default;
+  cursor: default !important;
 }
 
 input:focus {

@@ -36,3 +36,7 @@
   z-index: -1;
   pointer-events: none;
 }
+
+.dropdown .selected {
+  background-color: red;
+}

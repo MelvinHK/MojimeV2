@@ -33,6 +33,7 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
       playsInline
       autoPlay
       crossOrigin
+      volume={0.5}
     >
       <MediaProvider />
       <div className='video-title'>
