@@ -90,6 +90,7 @@ function SearchBar() {
         <input
           className='searchbar'
           value={value}
+          onFocus={() => toggleDropdown(true)}
           onChange={e => (
             setValue(e.target.value),
             setSelectedIndex(-1)
