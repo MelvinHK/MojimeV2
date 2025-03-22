@@ -14,18 +14,29 @@ export const Route = createFileRoute('/$animeId')({
   validateSearch: () => ({}) as AnimeSearchParams
 })
 
+export enum IndexNavigation {
+  NEXT="next",
+  PREVIOUS= "previous"
+};
+
 interface AnimeContextType {
   anime: Anime | undefined;
   currentIndex: number;
   setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
   episode: Episode | undefined;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  handleNavigate: (type: IndexNavigation) => void;
 }
 
 export const AnimeContext = createContext<AnimeContextType>({
   anime: undefined,
   currentIndex: 0,
   setCurrentIndex: () => 0,
-  episode: undefined
+  episode: undefined,
+  hasNext: false,
+  hasPrevious: false,
+  handleNavigate: (_type: IndexNavigation) => {}
 });
 
 function $AnimeId() {
@@ -86,13 +97,25 @@ function $AnimeId() {
     gcTime: 60 * 60 * 1000
   });
 
+  const hasPrevious = useMemo(() => currentIndex > 0, [currentIndex]);
+  const hasNext = useMemo(() => !anime || currentIndex < anime.episodes.length - 1, [anime, currentIndex]);
+
+  const handleNavigate = (type: IndexNavigation) => {
+    if (!anime) return;
+    const newIndex = type === IndexNavigation.NEXT ? currentIndex + 1 : currentIndex - 1;
+    navigate({ search: () => ({ ep: anime.episodes[newIndex].number }) });
+  }
+
   return anime && episodeURL && (
     <AnimeContext.Provider
       value={{
         anime: anime,
         currentIndex: currentIndex,
         setCurrentIndex: setCurrentIndex,
-        episode: selectedEpisode
+        episode: selectedEpisode,
+        hasNext: hasNext,
+        hasPrevious: hasPrevious,
+        handleNavigate: handleNavigate
       }}
     >
       <VideoPlayer m3u8URL={episodeURL} />
