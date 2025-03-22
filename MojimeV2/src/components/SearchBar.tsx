@@ -78,6 +78,7 @@ function SearchBar() {
         to={result.id}
         onClick={() => toggleDropdown(false)}
         className={index === selectedIndex ? "selected" : ""}
+        tabIndex={-1}
       >
         {result.title}
       </Link>

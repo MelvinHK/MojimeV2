@@ -18,13 +18,13 @@
   background-color: var(--black);
 }
 
+body {
+  margin: var(--pad-x);
+}
+
 a {
   color: inherit;
   text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
 }
 
 * {
