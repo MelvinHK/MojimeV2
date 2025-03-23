@@ -14,6 +14,7 @@ function NavigateBtn({ type }: NavigateBtnProps) {
       className="media-button"
       onClick={() => handleNavigate(type)}
       disabled={type === IndexNavigation.NEXT ? !hasNext : !hasPrevious}
+      title={`${type === IndexNavigation.NEXT ? "Next" : "Previous"} Episode`}
     >
       {type === IndexNavigation.NEXT ?
         <svg xmlns="http://www.w3.org/2000/svg" className="next-icon" fill="currentColor" viewBox="4.6 3.3 8.1 9.4">

@@ -26,7 +26,7 @@ function QualityBtn() {
 
   return options.length > 0 && (
     <Menu.Root>
-      <Menu.Button className="media-button quality-button"><u>{hint}</u></Menu.Button>
+      <Menu.Button className="media-button quality-button" title="Quality"><u>{hint}</u></Menu.Button>
       <Menu.Items className="media-menu" placement="top" offset={40}>
         <Menu.RadioGroup value={options.selectedValue}>
           {options.map(({ label, value, select }) => (

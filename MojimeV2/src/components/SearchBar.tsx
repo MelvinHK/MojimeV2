@@ -98,6 +98,7 @@ function SearchBar() {
           required
           placeholder='Search'
           spellCheck={false}
+          title=""
         />
       </form>
       {(results || isFetching) && isDropdownVisible &&

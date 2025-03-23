@@ -18,7 +18,7 @@ function VolumeBtn() {
 
   return (
     <Menu.Root>
-      <Menu.Button className="media-button">
+      <Menu.Button className="media-button" title="Volume">
         {roundedValue > 5 ?
           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="volume-icon" viewBox="3 3.5 9.3 9.3">
             <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z" />
