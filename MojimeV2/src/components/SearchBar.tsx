@@ -1,37 +1,40 @@
 import '../styles/searchbar/searchbar.css';
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useRef, useState, useEffect } from "react"
 import { getSearch } from "../lib/api";
 import { Link, useNavigate } from "@tanstack/react-router";
 import useClickAway from '../lib/hooks/useClickAway';
 
 function SearchBar() {
-  const [value, setValue] = useState("");
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [isDropdownVisible, toggleDropdown] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   useClickAway({
-    onClick: () => (
-      toggleDropdown(true),
-      setSelectedIndex(-1)
-    ),
-    onAway: () => toggleDropdown(false)
+    onClick: () => (toggleDropdown(true), setSelectedIndex(-1)),
+    onAway: () => (toggleDropdown(false), setSelectedIndex(-1))
   }, containerRef);
 
   const { data: results, refetch, isFetching } = useQuery({
-    queryKey: ['Search'],
-    queryFn: () => getSearch(value),
-    enabled: false,
+    queryKey: ['Search', searchValue],
+    queryFn: () => getSearch(searchValue),
+    enabled: !!searchValue,
     staleTime: 5 * 60 * 1000,
     gcTime: 5 * 60 * 1000
   });
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    refetch();
+    setSearchValue(inputValue);
+    const cachedData = queryClient.getQueryData(['Search', searchValue]);
+    if (!cachedData) await refetch();
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -90,10 +93,10 @@ function SearchBar() {
       <form onSubmit={handleSubmit}>
         <input
           className='searchbar'
-          value={value}
+          value={inputValue}
           onFocus={() => toggleDropdown(true)}
           onChange={e => (
-            setValue(e.target.value),
+            setInputValue(e.target.value),
             setSelectedIndex(-1)
           )}
           required
