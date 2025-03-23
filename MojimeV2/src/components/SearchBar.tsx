@@ -7,8 +7,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import useClickAway from '../lib/hooks/useClickAway';
 
 function SearchBar() {
-  const [inputValue, setInputValue] = useState("");
-  const [searchValue, setSearchValue] = useState("");
+  const [value, setValue] = useState("");
   const [isDropdownVisible, toggleDropdown] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
@@ -23,17 +22,16 @@ function SearchBar() {
   }, containerRef);
 
   const { data: results, refetch, isFetching } = useQuery({
-    queryKey: ['Search', searchValue],
-    queryFn: () => getSearch(searchValue),
-    enabled: !!searchValue,
+    queryKey: ['Search', value],
+    queryFn: () => getSearch(value),
+    enabled: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 5 * 60 * 1000
   });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setSearchValue(inputValue);
-    const cachedData = queryClient.getQueryData(['Search', searchValue]);
+    const cachedData = queryClient.getQueryData(['Search', value]);
     if (!cachedData) await refetch();
   }
 
@@ -93,10 +91,10 @@ function SearchBar() {
       <form onSubmit={handleSubmit}>
         <input
           className='searchbar'
-          value={inputValue}
+          value={value}
           onFocus={() => toggleDropdown(true)}
           onChange={e => (
-            setInputValue(e.target.value),
+            setValue(e.target.value),
             setSelectedIndex(-1)
           )}
           required
