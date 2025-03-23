@@ -5,10 +5,20 @@ import './styles/index.css'
 import './styles/main.css'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { RouterProvider, createRouter , Link} from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 
-const router = createRouter({ routeTree });
+const router = createRouter({ 
+  routeTree,
+  defaultNotFoundComponent: () => {
+    return (
+      <div className='home-container'>
+        <Link to="/" title="Home">{"(っ °Д °;)っ"}</Link>
+        <div>Page not found!!</div>
+      </div>
+    )
+  },
+ });
 
 declare module '@tanstack/react-router' {
   interface Register {
