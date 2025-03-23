@@ -31,6 +31,7 @@ function SearchBar() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!/\S/.test(value)) return;
     const cachedData = queryClient.getQueryData(['Search', value]);
     if (!cachedData) await refetch();
   }
@@ -95,11 +96,24 @@ function SearchBar() {
           value={value}
           onFocus={() => toggleDropdown(true)}
           onChange={e => setValue(e.target.value)}
-          required
           placeholder='Search'
           spellCheck={false}
           title=""
         />
+        {value.length > 0 &&
+          <button
+            title="Clear Search"
+            type="button"
+            className="clear-search-btn"
+            onClick={(e) => (
+              e.preventDefault(),
+              setValue(""),
+              containerRef.current?.querySelector('input')?.focus()
+            )}
+          >
+            {"\u2715"}
+          </button>
+        }
       </form>
       {(results || isFetching) && isDropdownVisible &&
         <div className="dropdown">

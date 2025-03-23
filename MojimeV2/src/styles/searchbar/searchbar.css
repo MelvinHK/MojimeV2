@@ -6,6 +6,11 @@
   z-index: 2;
 }
 
+.searchbar-container form {
+  display: flex;
+  position: relative;
+}
+
 .searchbar {
   position: relative;
   border-radius: 8px;
@@ -44,8 +49,7 @@
   position: absolute;
   background-color: #525252;
   width: calc(100% - calc(var(--pad-x) * 2));
-  border-radius: 1.5px;
-  height: 1.5px;
+  height: 1px;
   top: 0;
   left: var(--pad-x);
   pointer-events: none;
@@ -59,4 +63,15 @@
 .dropdown a:hover,
 .dropdown .selected {
   background-color: #525252;
+}
+
+.clear-search-btn {
+  position: absolute;
+  align-self: center;
+  padding: calc(var(--pad-x) / 2);
+  right: calc(var(--pad-x) / 2);
+  background-color: transparent;
+  color: gray;
+  border: none;
+  cursor: pointer;
 }
