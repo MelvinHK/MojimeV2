@@ -17,8 +17,8 @@ function SearchBar() {
   const navigate = useNavigate();
 
   useClickAway({
-    onClick: () => (toggleDropdown(true), setSelectedIndex(-1)),
-    onAway: () => (toggleDropdown(false), setSelectedIndex(-1))
+    onClick: () => toggleDropdown(true),
+    onAway: () => toggleDropdown(false)
   }, containerRef);
 
   const { data: results, refetch, isFetching } = useQuery({
@@ -36,7 +36,7 @@ function SearchBar() {
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (!results || results.length === 0) return;
+    if (!isDropdownVisible || !results || results.length === 0) return;
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -50,19 +50,20 @@ function SearchBar() {
 
     if (e.key === "Enter" && selectedIndex !== -1) {
       e.preventDefault();
-      const selectedResult = results[selectedIndex];
-      if (selectedResult) {
-        toggleDropdown(false);
-        containerRef.current?.querySelector('input')?.blur();
-        navigate({ to: `/${selectedResult.id}` });
-      }
+      toggleDropdown(false);
+      containerRef.current?.querySelector('input')?.blur();
+      navigate({ to: `/${results[selectedIndex].id}` });
     }
   };
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [results, selectedIndex]);
+  }, [results, selectedIndex, isDropdownVisible]);
+
+  useEffect(() => {
+    setSelectedIndex(-1);
+  }, [isDropdownVisible])
 
   const renderDropdown = () => {
     if (isFetching) {
@@ -93,10 +94,7 @@ function SearchBar() {
           className='searchbar'
           value={value}
           onFocus={() => toggleDropdown(true)}
-          onChange={e => (
-            setValue(e.target.value),
-            setSelectedIndex(-1)
-          )}
+          onChange={e => setValue(e.target.value)}
           required
           placeholder='Search'
           spellCheck={false}
