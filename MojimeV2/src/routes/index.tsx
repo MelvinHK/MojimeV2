@@ -5,5 +5,9 @@ export const Route = createFileRoute('/')({
 })
 
 function Index() {
-  return <div>Mojime v2</div>
+  return (
+    <div className="home-container">
+      Mojime
+    </div>
+  )
 }

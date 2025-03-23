@@ -36,6 +36,13 @@
   justify-content: center;
 }
 
+.home-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .anime-details-container {
   align-items: center;
   flex-direction: column;

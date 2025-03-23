@@ -18,8 +18,21 @@
   background-color: var(--black);
 }
 
+html, body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 body {
-  margin: var(--pad-x);
+  margin: 0;
+  padding: var(--pad-x);
 }
 
 a {
