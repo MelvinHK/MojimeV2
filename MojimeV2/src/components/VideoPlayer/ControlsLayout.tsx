@@ -17,7 +17,7 @@ function ControlsLayout() {
         <PausePlayButton />
         <NavigateBtn type={IndexNavigation.NEXT} />
         <TimeGroup />
-        <div className='spacer'></div>
+        <div className='m-auto'></div>
         <QualityBtn />
         <VolumeBtn />
         <FullscreenBtn />

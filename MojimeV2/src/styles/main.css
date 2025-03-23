@@ -8,7 +8,7 @@
   margin-right: auto;
 }
 
-.spacer {
+.m-auto {
   margin: auto;
 }
 
@@ -21,8 +21,22 @@
   gap: 0.5rem
 }
 
+.j-center {
+  justify-content: center;
+}
+
 .header {
   width: 100%;
+}
+
+.header,
+.video-container,
+.anime-details-container {
   display: flex;
   justify-content: center;
+}
+
+.anime-details-container {
+  align-items: center;
+  flex-direction: column;
 }

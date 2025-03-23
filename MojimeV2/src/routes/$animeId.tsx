@@ -15,8 +15,8 @@ export const Route = createFileRoute('/$animeId')({
 })
 
 export enum IndexNavigation {
-  NEXT="next",
-  PREVIOUS= "previous"
+  NEXT = "next",
+  PREVIOUS = "previous"
 };
 
 interface AnimeContextType {
@@ -36,7 +36,7 @@ export const AnimeContext = createContext<AnimeContextType>({
   episode: undefined,
   hasNext: false,
   hasPrevious: false,
-  handleNavigate: (_type: IndexNavigation) => {}
+  handleNavigate: (_type: IndexNavigation) => { }
 });
 
 function $AnimeId() {
@@ -118,9 +118,13 @@ function $AnimeId() {
         handleNavigate: handleNavigate
       }}
     >
-      <VideoPlayer m3u8URL={episodeURL} />
-      <p>{anime.title}</p>
-      <div>{anime.episodes[currentIndex].number} / {anime.totalEpisodes}</div>
+      <div className='video-container'>
+        <VideoPlayer m3u8URL={episodeURL} />
+      </div>
+      <div className='anime-details-container'>
+        <p>{anime.title}</p>
+        <div>{anime.episodes[currentIndex].number} / {anime.totalEpisodes}</div>
+      </div>
     </AnimeContext.Provider>
   )
 }
