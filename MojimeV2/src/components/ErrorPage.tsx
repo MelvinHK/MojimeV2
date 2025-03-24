@@ -1,22 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { isAxiosError } from "axios";
-import { PAGE_NOT_FOUND_ERROR } from "../main";
 
 interface ErrorProps {
-  error?: any;
-  customError?: string;
+  error: any;
 }
 
-function ErrorPage({ error, customError }: ErrorProps) {
+function ErrorPage({ error }: ErrorProps) {
   const renderErrorMessage = () => {
-    if (customError) {
-      return <div>{customError}</div>
-    }
-
-    if (error === PAGE_NOT_FOUND_ERROR) {
-      return <div>Error 404: Page not found</div>
-    }
-
     if (isAxiosError(error)) {
       const status = error.status;
       const message = status === 404 ? "Anime not found" : error.message;
@@ -25,7 +15,7 @@ function ErrorPage({ error, customError }: ErrorProps) {
       );
     }
 
-    return <div>Error: Something went wrong</div>
+    return <div>Error: {error.message ?? "Something went wrong"}</div>
   }
 
   return (

@@ -9,11 +9,9 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import ErrorPage from './components/ErrorPage'
 
-export const PAGE_NOT_FOUND_ERROR = new Error("Page not found");
-
 const router = createRouter({
   routeTree,
-  defaultNotFoundComponent: () => <ErrorPage error={PAGE_NOT_FOUND_ERROR} />
+  defaultNotFoundComponent: () => <ErrorPage error={new Error("Page not found")} />
 });
 
 declare module '@tanstack/react-router' {

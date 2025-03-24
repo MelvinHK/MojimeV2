@@ -118,7 +118,7 @@ function $AnimeId() {
   }
 
   if (anime?.episodes.length === 0) {
-    return <ErrorPage customError="Error: No episodes exist (yet?)" />;
+    return <ErrorPage error={new Error("Error: No episodes exist (yet?)")} />;
   }
 
   return anime && episodeURL && (
