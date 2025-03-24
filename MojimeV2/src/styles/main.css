@@ -1,5 +1,38 @@
 /* For global styling layouts, general utility classes */
 
+.header {
+  width: 100%;
+}
+
+.header,
+.video-container,
+.anime-details-container {
+  display: flex;
+  justify-content: center;
+}
+
+.home-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.anime-details-container {
+  align-items: center;
+  flex-direction: column;
+}
+
+.btn {
+  background-color: var(--gray);
+  border: none;
+  color: var(--white);
+  border-radius: var(--b-radius);
+  padding: var(--pad);
+  cursor: pointer;
+}
+
 .ml-auto {
   margin-left: auto;
 }
@@ -25,26 +58,10 @@
   justify-content: center;
 }
 
-.header {
-  width: 100%;
-}
-
-.header,
-.video-container,
-.anime-details-container {
-  display: flex;
-  justify-content: center;
-}
-
-.home-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+.a-center {
   align-items: center;
-  justify-content: center;
 }
 
-.anime-details-container {
-  align-items: center;
-  flex-direction: column;
+.gap-1 {
+  gap: 1rem
 }

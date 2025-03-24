@@ -99,7 +99,7 @@ function $AnimeId() {
       }
     },
     enabled: !!anime && !!selectedEpisode,
-    placeholderData: episodeURL => episodeURL,
+    placeholderData: (episodeURL) => episodeURL,
     staleTime: Infinity,
     gcTime: 60 * 60 * 1000
   });
@@ -138,7 +138,25 @@ function $AnimeId() {
       </div>
       <div className='anime-details-container'>
         <p>{anime.title}</p>
-        <div>{anime.episodes[currentIndex].number} / {anime.totalEpisodes}</div>
+        <div className='flex gap-1 a-center'>
+          <button
+            className='btn'
+            onClick={() => handleNavigate(IndexNavigation.PREVIOUS)}
+            disabled={!hasPrevious}
+          >
+            Prev
+          </button>
+          <div>
+            {anime.episodes[currentIndex].number} / {anime.totalEpisodes}
+          </div>
+          <button
+            className='btn'
+            onClick={() => handleNavigate(IndexNavigation.NEXT)}
+            disabled={!hasNext}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </AnimeContext.Provider>
   )

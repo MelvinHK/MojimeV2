@@ -12,6 +12,7 @@ function SearchBar() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ function SearchBar() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    toggleDropdown(true);
     if (!/\S/.test(value)) return;
     const cachedData = queryClient.getQueryData(['Search', value]);
     if (!cachedData) await refetch();
@@ -52,7 +54,7 @@ function SearchBar() {
     if (e.key === "Enter" && selectedIndex !== -1) {
       e.preventDefault();
       toggleDropdown(false);
-      containerRef.current?.querySelector('input')?.blur();
+      inputRef.current?.blur();
       navigate({ to: `/${results[selectedIndex].id}` });
     }
   };
@@ -60,7 +62,7 @@ function SearchBar() {
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [results, selectedIndex, isDropdownVisible]);
+  }, [inputRef, results, selectedIndex, isDropdownVisible]);
 
   useEffect(() => {
     setSelectedIndex(-1);
@@ -91,13 +93,14 @@ function SearchBar() {
   const handleClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     setValue("");
-    containerRef.current?.querySelector('input')?.focus();
+    inputRef.current?.focus();
   }
 
   return (
     <div className='searchbar-container' ref={containerRef}>
       <form onSubmit={handleSubmit}>
         <input
+          ref={inputRef}
           className='searchbar'
           value={value}
           onFocus={() => toggleDropdown(true)}
@@ -112,6 +115,7 @@ function SearchBar() {
             type="button"
             className="clear-search-btn"
             onClick={handleClear}
+            tabIndex={-1}
           >
             {"\u2715"}
           </button>
