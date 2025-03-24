@@ -56,7 +56,7 @@ function $AnimeId() {
       }
     },
     staleTime: 0,
-    gcTime: Infinity,
+    gcTime: 1209600000, // 2 weeks
     retry: (failureCount, error) => {
       return (error as AxiosError)?.status !== 404 && failureCount < 3;
     }
