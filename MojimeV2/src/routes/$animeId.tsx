@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query"
 import { getAnime, getEpisode, getProxyURL } from "../lib/api"
 import { useState, createContext, useEffect, useMemo } from 'react'
 import { Anime, Episode } from '../models'
+import { AxiosError } from 'axios'
+import ErrorPage from '../components/ErrorPage'
 
 interface AnimeSearchParams {
   ep: number
@@ -46,7 +48,7 @@ function $AnimeId() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const { data: anime } = useQuery({
+  const { data: anime, error: animeError } = useQuery({
     queryKey: ['Anime', animeId],
     queryFn: async () => {
       if (animeId) {
@@ -54,11 +56,14 @@ function $AnimeId() {
       }
     },
     staleTime: 0,
-    gcTime: Infinity
+    gcTime: Infinity,
+    retry: (failureCount, error) => {
+      return (error as AxiosError)?.status !== 404 && failureCount < 3;
+    }
   });
 
   // Derive selected episode from URL param.
-  // If there's no 'ep' param, default to the first episode.
+  // If there's no ep param or no match is found, default to the first episode.
   const selectedEpisode = useMemo(() => {
     if (!anime) return undefined;
     return anime.episodes.find(episode => episode.number === episodeParam)
@@ -73,9 +78,11 @@ function $AnimeId() {
     ));
   }, [anime, selectedEpisode]);
 
-  // If no ep param is present, update the URL once with the default episode.
+  // Update URL ep param to be selectedEpisode.number if
+  // ep param didn't exist/match.
   useEffect(() => {
-    if (anime && !episodeParam && selectedEpisode) {
+    if (!anime || !selectedEpisode) return;
+    if (selectedEpisode.number !== episodeParam) {
       navigate({
         search: () => ({ ep: selectedEpisode.number }),
         replace: true
@@ -104,6 +111,14 @@ function $AnimeId() {
     if (!anime) return;
     const newIndex = type === IndexNavigation.NEXT ? currentIndex + 1 : currentIndex - 1;
     navigate({ search: () => ({ ep: anime.episodes[newIndex].number }) });
+  }
+
+  if (animeError) {
+    return <ErrorPage error={animeError} />;
+  }
+
+  if (anime?.episodes.length === 0) {
+    return <ErrorPage customError="Error: No episodes exist (yet?)" />;
   }
 
   return anime && episodeURL && (

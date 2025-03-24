@@ -5,20 +5,16 @@ import './styles/index.css'
 import './styles/main.css'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { RouterProvider, createRouter , Link} from '@tanstack/react-router'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
+import ErrorPage from './components/ErrorPage'
 
-const router = createRouter({ 
+export const PAGE_NOT_FOUND_ERROR = new Error("Page not found");
+
+const router = createRouter({
   routeTree,
-  defaultNotFoundComponent: () => {
-    return (
-      <div className='home-container'>
-        <Link to="/" title="Home">{"(っ °Д °;)っ"}</Link>
-        <div>Page not found!!</div>
-      </div>
-    )
-  },
- });
+  defaultNotFoundComponent: () => <ErrorPage error={PAGE_NOT_FOUND_ERROR} />
+});
 
 declare module '@tanstack/react-router' {
   interface Register {
