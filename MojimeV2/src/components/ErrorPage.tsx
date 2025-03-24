@@ -25,9 +25,7 @@ function ErrorPage({ error, customError }: ErrorProps) {
       );
     }
 
-    if (!error) {
-      return <div>Error: Something went wrong</div>
-    }
+    return <div>Error: Something went wrong</div>
   }
 
   return (
