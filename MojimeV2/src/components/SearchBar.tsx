@@ -104,7 +104,7 @@ function SearchBar() {
           className='searchbar'
           value={value}
           onFocus={() => toggleDropdown(true)}
-          onChange={e => setValue(e.target.value)}
+          onChange={e => (setValue(e.target.value), toggleDropdown(true))}
           placeholder='Search'
           spellCheck={false}
           title=""

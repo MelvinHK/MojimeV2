@@ -4,8 +4,13 @@ import { createRoot } from 'react-dom/client'
 import './styles/index.css'
 import './styles/main.css'
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { PersistQueryClientProvider, removeOldestQuery } from '@tanstack/react-query-persist-client'
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
+
+import { compress, decompress } from 'lz-string'
+
 import { routeTree } from './routeTree.gen'
 import ErrorPage from './components/ErrorPage'
 
@@ -28,10 +33,24 @@ const queryClient = new QueryClient({
   },
 });
 
+const persister = createSyncStoragePersister({
+  storage: window.localStorage,
+  key: "offlineCache",
+  serialize: data => compress(JSON.stringify(data)),
+  deserialize: data => JSON.parse(decompress(data)),
+  retry: removeOldestQuery
+})
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{
+        persister,
+        maxAge: Infinity
+      }}
+    >
       <RouterProvider router={router} />
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   </StrictMode>,
 );

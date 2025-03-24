@@ -11,7 +11,7 @@ function ErrorPage({ error }: ErrorProps) {
       const status = error.status;
       const message = status === 404 ? "Anime not found" : error.message;
       return (
-        <div>Error {status ?? "Unknown Status"}: {message ?? "Something went wrong during the request..."}</div>
+        <div>Error {status ?? "Unknown Status"}: {message ?? "An unknown error occured for your request"}</div>
       );
     }
 
