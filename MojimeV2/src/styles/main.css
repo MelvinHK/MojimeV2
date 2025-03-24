@@ -11,6 +11,16 @@
   justify-content: center;
 }
 
+@media (max-width: 480px) and (orientation: portrait) {
+  .video-container {
+    width: 100vw;
+    margin-left: calc(-1* (100vw - 100%) / 2);
+  }
+  .video-player {
+    border-radius: 0 !important;
+  }
+}
+
 .home-container {
   flex: 1;
   display: flex;
