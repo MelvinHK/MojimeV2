@@ -88,6 +88,12 @@ function SearchBar() {
     ));
   };
 
+  const handleClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    setValue("");
+    containerRef.current?.querySelector('input')?.focus();
+  }
+
   return (
     <div className='searchbar-container' ref={containerRef}>
       <form onSubmit={handleSubmit}>
@@ -105,11 +111,7 @@ function SearchBar() {
             title="Clear Search"
             type="button"
             className="clear-search-btn"
-            onClick={(e) => (
-              e.preventDefault(),
-              setValue(""),
-              containerRef.current?.querySelector('input')?.focus()
-            )}
+            onClick={handleClear}
           >
             {"\u2715"}
           </button>
