@@ -1,5 +1,11 @@
 import { useEffect } from 'react';
 
+/**
+ * A hook that has two callbacks for clicking on/away from an element.
+ * 
+ * @param options 
+ * @param ref
+ */
 const useClickAway = (
   options: {
     onClick: () => void;

@@ -3,7 +3,7 @@ import '../../styles/video/mediaSlider.css'
 
 function ProgressBar() {
   return (
-    <TimeSlider.Root className="media-slider">
+    <TimeSlider.Root className="media-slider" noSwipeGesture pauseWhileDragging>
       <TimeSlider.Track className="media-slider-track">
         <TimeSlider.TrackFill className="media-slider-track-fill media-slider-track" />
         <TimeSlider.Progress className="media-slider-progress media-slider-track" />

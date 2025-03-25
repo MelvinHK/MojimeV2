@@ -32,19 +32,6 @@
   box-shadow: var(--media-focus-ring, 0 0 0 3px rgb(78 156 246));
 }
 
-.media-button:has(.play-icon), .media-button:has(.pause-icon) {
-  width: 18px;
-}
-
-.media-button:has(.next-icon) {
-  margin-left: 10px;
-  margin-right: 6px;
-}
-
-.media-button:has(.previous-icon) {
-  margin-right: 10px;
-}
-
 .media-button>.volume-icon {
   width: 30px;
 }
@@ -64,10 +51,8 @@
 .media-button::before {
   content: '';
   position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
+  width: 40px;
+  height: 40px;
   background: transparent;
 }
 
