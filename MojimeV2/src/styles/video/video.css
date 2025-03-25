@@ -20,6 +20,7 @@
   top: 0;
   width: 100%;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), transparent);
+  pointer-events: none;
 }
 
 .video-player:has(.controls-layout:not([data-visible])) .video-title,

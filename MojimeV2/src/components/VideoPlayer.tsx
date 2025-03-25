@@ -1,10 +1,12 @@
 import '@vidstack/react/player/styles/base.css';
 import '../styles/video/video.css';
+import '../styles/video/gestures.css';
 import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
 import ControlsLayout from './VideoPlayer/ControlsLayout';
 import { useContext, useEffect, useRef } from 'react';
 import { AnimeContext } from '../routes/$animeId';
 import { PREFERRED_VOLUME_KEY } from './VideoPlayer/VolumeBtn';
+import Gestures from './VideoPlayer/Gestures';
 
 interface VideoPlayerProps {
   m3u8URL: string,
@@ -12,6 +14,7 @@ interface VideoPlayerProps {
 
 function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
   const { anime, episode } = useContext(AnimeContext);
+
   const playerRef = useRef<MediaPlayerInstance>(null);
 
   // Player configuration
@@ -46,6 +49,7 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
         {anime?.title ?? ""} - Episode {episode?.number}
       </div>
       <ControlsLayout />
+      <Gestures />
     </MediaPlayer>
   )
 }
