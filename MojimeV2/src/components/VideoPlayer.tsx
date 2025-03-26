@@ -1,12 +1,14 @@
 import '@vidstack/react/player/styles/base.css';
 import '../styles/video/video.css';
 import '../styles/video/gestures.css';
-import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
+import { MediaPlayer, MediaPlayerInstance, MediaProvider, MediaTimeUpdateEventDetail } from '@vidstack/react';
 import ControlsLayout from './VideoPlayer/ControlsLayout';
 import { useContext, useEffect, useRef } from 'react';
 import { AnimeContext } from '../routes/$animeId';
 import { PREFERRED_VOLUME_KEY } from './VideoPlayer/VolumeBtn';
 import Gestures from './VideoPlayer/Gestures';
+import { throttle } from 'lodash-es';
+import { useParams } from '@tanstack/react-router';
 
 interface VideoPlayerProps {
   m3u8URL: string,
@@ -15,7 +17,9 @@ interface VideoPlayerProps {
 export const CONTROLS_DELAY = 2000;
 
 function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
-  const { anime, episode } = useContext(AnimeContext);
+  const { animeId } = useParams({ strict: false });
+  const { anime, episode, currentIndex, prefetchEpisode } = useContext(AnimeContext);
+  const prefetchAllowed = useRef<boolean>(true);
 
   const playerRef = useRef<MediaPlayerInstance>(null);
 
@@ -32,6 +36,21 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
     return preferredVolume ? Number(preferredVolume) * 0.01 : 1;
   }
 
+  const handleTime = (e: MediaTimeUpdateEventDetail) => {
+    const duration = playerRef.current?.duration;
+    const time = e.currentTime;
+
+    if (!duration || time === 0 || duration === 0) return;
+
+    if ((time / duration) >= 0.75 && prefetchAllowed.current) {
+      prefetchAllowed.current = false;
+      const nextEpisode = anime?.episodes[currentIndex + 1];
+      if (nextEpisode && animeId) {
+        prefetchEpisode(nextEpisode, animeId);
+      }
+    }
+  }
+
   return (
     <MediaPlayer
       ref={playerRef}
@@ -42,10 +61,12 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
       }}
       volume={initVolume()}
       load="eager"
+      onCanPlay={() => prefetchAllowed.current = true}
+      onTimeUpdate={throttle(handleTime, 1000)}
+      controlsDelay={CONTROLS_DELAY}
       playsInline
       autoPlay
       crossOrigin
-      controlsDelay={CONTROLS_DELAY}
     >
       <MediaProvider />
       {anime && episode &&

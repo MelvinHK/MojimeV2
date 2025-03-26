@@ -1,6 +1,6 @@
 import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router'
 import VideoPlayer from "../components/VideoPlayer"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getAnime, getEpisode, getProxyURL } from "../lib/api"
 import { useState, createContext, useEffect, useMemo } from 'react'
 import { Anime, Episode } from '../models'
@@ -30,6 +30,7 @@ interface AnimeContextType {
   hasPrevious: boolean;
   handleNavigate: (type: IndexNavigation) => void;
   isFetching: boolean;
+  prefetchEpisode: (selectedEpisode: Episode, animeId: string) => void;
 }
 
 export const AnimeContext = createContext<AnimeContextType>({
@@ -39,11 +40,14 @@ export const AnimeContext = createContext<AnimeContextType>({
   episode: undefined,
   hasNext: false,
   hasPrevious: false,
-  handleNavigate: (_type: IndexNavigation) => { },
+  handleNavigate: (_type) => { },
   isFetching: true,
+  prefetchEpisode: (_selectedEpisode, _animeId) => { },
 });
 
 function $AnimeId() {
+  const queryClient = useQueryClient();
+
   const { animeId } = useParams({ strict: false });
   const { ep: episodeParam } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
@@ -92,19 +96,30 @@ function $AnimeId() {
     }
   }, [anime, episodeParam, selectedEpisode, navigate]);
 
+  const fetchEpisode = async (id?: string) => {
+    if (selectedEpisode) {
+      const source = await getEpisode(id ?? selectedEpisode.id);
+      return getProxyURL(source.url);
+    }
+  }
+
   const { data: episodeURL, isFetching } = useQuery({
     queryKey: ['Episode', selectedEpisode?.number, animeId],
-    queryFn: async () => {
-      if (selectedEpisode) {
-        const source = await getEpisode(selectedEpisode.id);
-        return getProxyURL(source.url);
-      }
-    },
+    queryFn: () => fetchEpisode(),
     enabled: !!anime && !!selectedEpisode,
     placeholderData: (episodeURL) => episodeURL,
     staleTime: Infinity,
     gcTime: 60 * 60 * 1000
   });
+
+  const prefetchEpisode = (selectedEpisode: Episode, animeId: string) => {
+    queryClient.prefetchQuery({
+      queryKey: ['Episode', selectedEpisode?.number, animeId],
+      queryFn: () => fetchEpisode(selectedEpisode.id),
+      staleTime: Infinity,
+      gcTime: 60 * 60 * 1000
+    })
+  }
 
   const hasPrevious = useMemo(() => currentIndex > 0, [currentIndex]);
   const hasNext = useMemo(() => !anime || currentIndex < anime.episodes.length - 1, [anime, currentIndex]);
@@ -133,7 +148,8 @@ function $AnimeId() {
         hasNext: hasNext,
         hasPrevious: hasPrevious,
         handleNavigate: handleNavigate,
-        isFetching: isFetching
+        isFetching: isFetching,
+        prefetchEpisode: prefetchEpisode,
       }}
     >
       <div className='video-container'>
