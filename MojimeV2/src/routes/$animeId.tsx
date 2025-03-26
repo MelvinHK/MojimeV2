@@ -30,7 +30,7 @@ interface AnimeContextType {
   hasPrevious: boolean;
   handleNavigate: (type: IndexNavigation) => void;
   isFetching: boolean;
-  prefetchEpisode: (selectedEpisode: Episode, animeId: string) => void;
+  prefetchEpisode: (selectedEpisode: Episode) => void;
 }
 
 export const AnimeContext = createContext<AnimeContextType>({
@@ -42,7 +42,7 @@ export const AnimeContext = createContext<AnimeContextType>({
   hasPrevious: false,
   handleNavigate: (_type) => { },
   isFetching: true,
-  prefetchEpisode: (_selectedEpisode, _animeId) => { },
+  prefetchEpisode: (_selectedEpisode ) => { },
 });
 
 function $AnimeId() {
@@ -112,10 +112,10 @@ function $AnimeId() {
     gcTime: 60 * 60 * 1000
   });
 
-  const prefetchEpisode = (selectedEpisode: Episode, animeId: string) => {
+  const prefetchEpisode = (episode: Episode) => {
     queryClient.prefetchQuery({
-      queryKey: ['Episode', selectedEpisode?.number, animeId],
-      queryFn: () => fetchEpisode(selectedEpisode.id),
+      queryKey: ['Episode', episode?.number, animeId],
+      queryFn: () => fetchEpisode(episode.id),
       staleTime: Infinity,
       gcTime: 60 * 60 * 1000
     })

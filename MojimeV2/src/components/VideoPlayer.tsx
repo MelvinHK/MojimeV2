@@ -8,7 +8,6 @@ import { AnimeContext } from '../routes/$animeId';
 import { PREFERRED_VOLUME_KEY } from './VideoPlayer/VolumeBtn';
 import Gestures from './VideoPlayer/Gestures';
 import { throttle } from 'lodash-es';
-import { useParams } from '@tanstack/react-router';
 
 interface VideoPlayerProps {
   m3u8URL: string,
@@ -17,7 +16,6 @@ interface VideoPlayerProps {
 export const CONTROLS_DELAY = 2000;
 
 function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
-  const { animeId } = useParams({ strict: false });
   const { anime, episode, currentIndex, prefetchEpisode } = useContext(AnimeContext);
   const prefetchAllowed = useRef<boolean>(true);
 
@@ -45,8 +43,8 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
     if ((time / duration) >= 0.75 && prefetchAllowed.current) {
       prefetchAllowed.current = false;
       const nextEpisode = anime?.episodes[currentIndex + 1];
-      if (nextEpisode && animeId) {
-        prefetchEpisode(nextEpisode, animeId);
+      if (nextEpisode) {
+        prefetchEpisode(nextEpisode);
       }
     }
   }
