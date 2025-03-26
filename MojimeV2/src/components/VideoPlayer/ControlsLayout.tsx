@@ -8,6 +8,7 @@ import QualityBtn from './QualityBtn';
 import NavigateBtn from './NavigateBtn';
 import { IndexNavigation } from '../../routes/$animeId';
 import useIsMobile from '../../lib/hooks/useIsMobile';
+import SeekBtn from './SeekBtn';
 
 function ControlsLayout() {
   const isMobile = useIsMobile();
@@ -33,6 +34,8 @@ function ControlsLayout() {
             </div>
           }
           <TimeGroup />
+          <SeekBtn time={85} />
+          <SeekBtn time={25} />
           <div className='m-auto'></div>
           <QualityBtn />
           {!isMobile && <VolumeBtn />}
