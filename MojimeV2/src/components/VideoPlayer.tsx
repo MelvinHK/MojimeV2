@@ -45,9 +45,11 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
       crossOrigin
     >
       <MediaProvider />
-      <div className='video-title'>
-        {anime?.title ?? ""} - Episode {episode?.number}
-      </div>
+      {anime && episode &&
+        <div className='video-title'>
+          {anime.title} - Episode {episode.number}
+        </div>
+      }
       <ControlsLayout />
       <Gestures playerRef={playerRef} />
     </MediaPlayer>
