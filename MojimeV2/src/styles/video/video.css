@@ -33,7 +33,6 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  opacity: 0;
   bottom: 0;
   width: 100%;
   height: 100%;
@@ -42,18 +41,15 @@
 
 .controls-layout[data-visible] {
   visibility: visible;
-  opacity: 1;
-}
-
-
-.video-player[data-fullscreen],
-.video-player[data-fullscreen] .controls-layout {
-  border-radius: 0;
 }
 
 .controls-layout:not([data-visible]) {
   visibility: hidden;
-  opacity: 0;
+}
+
+.video-player[data-fullscreen],
+.video-player[data-fullscreen] .controls-layout {
+  border-radius: 0;
 }
 
 
@@ -120,4 +116,20 @@
   backdrop-filter: var(--popup-blur);
   border-radius: 100%;
   z-index: -1;
+}
+
+.video-status {
+  border-radius: var(--video-b-radius);
+  background-color: var(--popup-color);
+  backdrop-filter: var(--popup-blur);
+  padding: 8px;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  visibility: visible;
+  pointer-events: none;
+}
+
+.video-player:not([data-buffering]) .buffer {
+  display: none;
 }

@@ -29,6 +29,7 @@ interface AnimeContextType {
   hasNext: boolean;
   hasPrevious: boolean;
   handleNavigate: (type: IndexNavigation) => void;
+  isFetching: boolean;
 }
 
 export const AnimeContext = createContext<AnimeContextType>({
@@ -38,7 +39,8 @@ export const AnimeContext = createContext<AnimeContextType>({
   episode: undefined,
   hasNext: false,
   hasPrevious: false,
-  handleNavigate: (_type: IndexNavigation) => { }
+  handleNavigate: (_type: IndexNavigation) => { },
+  isFetching: true,
 });
 
 function $AnimeId() {
@@ -90,7 +92,7 @@ function $AnimeId() {
     }
   }, [anime, episodeParam, selectedEpisode, navigate]);
 
-  const { data: episodeURL } = useQuery({
+  const { data: episodeURL, isFetching } = useQuery({
     queryKey: ['Episode', selectedEpisode?.number, animeId],
     queryFn: async () => {
       if (selectedEpisode) {
@@ -130,7 +132,8 @@ function $AnimeId() {
         episode: selectedEpisode,
         hasNext: hasNext,
         hasPrevious: hasPrevious,
-        handleNavigate: handleNavigate
+        handleNavigate: handleNavigate,
+        isFetching: isFetching
       }}
     >
       <div className='video-container'>

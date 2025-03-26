@@ -6,16 +6,23 @@ import VolumeBtn from './VolumeBtn';
 import { Controls } from '@vidstack/react';
 import QualityBtn from './QualityBtn';
 import NavigateBtn from './NavigateBtn';
-import { IndexNavigation } from '../../routes/$animeId';
+import { AnimeContext, IndexNavigation } from '../../routes/$animeId';
 import useIsMobile from '../../lib/hooks/useIsMobile';
 import SeekBtn from './SeekBtn';
+import { useContext } from 'react';
 
 function ControlsLayout() {
+  const { isFetching } = useContext(AnimeContext);
   const isMobile = useIsMobile();
 
   return (
     <Controls.Root className="controls-layout">
       <div className='m-auto'></div>
+      {isFetching ?
+        <div className='video-status'>Loading Episode...</div>
+      :
+        <div className='video-status buffer'>Buffering...</div>
+      }
       {isMobile &&
         <Controls.Group className='mobile-playback-container'>
           <NavigateBtn type={IndexNavigation.PREVIOUS} />
