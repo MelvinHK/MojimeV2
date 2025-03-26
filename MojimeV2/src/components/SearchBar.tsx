@@ -39,6 +39,19 @@ function SearchBar() {
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
+    const isInputFocused = document.activeElement === inputRef.current;
+
+    if (e.key === "/" && !isInputFocused) {
+      e.preventDefault();
+      inputRef.current?.focus();
+    }
+
+    if (e.key === "Escape" && isInputFocused) {
+      e.preventDefault();
+      inputRef.current?.blur();
+      toggleDropdown(false);
+    }
+
     if (!isDropdownVisible || !results || results.length === 0) return;
 
     if (e.key === "ArrowDown") {
