@@ -22,7 +22,7 @@ function SeekGesture({
   isForward?: boolean
 }) {
   const [isSeeking, setIsSeeking] = useAutoResetState(false, 500);
-  const [seekedTime, setSeekedTime] = useAutoResetState(0, 550); // +100ms (css transition time)
+  const [seekedTime, setSeekedTime] = useAutoResetState(0, 550); // +50ms (css transition time)
 
   const handleSeek = () => {
     setIsSeeking(true);
