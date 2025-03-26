@@ -12,6 +12,8 @@ interface VideoPlayerProps {
   m3u8URL: string,
 }
 
+export const CONTROLS_DELAY = 2000;
+
 function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
   const { anime, episode } = useContext(AnimeContext);
 
@@ -43,6 +45,7 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
       playsInline
       autoPlay
       crossOrigin
+      controlsDelay={CONTROLS_DELAY}
     >
       <MediaProvider />
       {anime && episode &&

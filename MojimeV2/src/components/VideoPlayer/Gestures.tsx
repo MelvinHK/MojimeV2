@@ -1,13 +1,25 @@
 import { Gesture, MediaPlayerInstance } from "@vidstack/react";
 import { RefObject } from "react";
 import { useAutoResetState } from "../../lib/hooks/useAutoResetState";
+import { CONTROLS_DELAY } from "../VideoPlayer";
 
 function Gestures({ playerRef }: { playerRef: RefObject<MediaPlayerInstance> }) {
+  const handleControlsToggle = () => {
+    const controls = playerRef.current?.controls;
+    if (controls?.showing && !playerRef.current?.paused) {
+      controls.hide(CONTROLS_DELAY);
+    }
+  }
+
   return (<>
-    <Gesture className="media-gesture" event="pointerup" action="toggle:paused" />{/* Mouse pointer only */}
-    <Gesture className='media-gesture' event="pointerup" action="toggle:controls" />{/* Touch screen only */}
-    <SeekGesture playerRef={playerRef} />{/* Touch screen only */}
-    <SeekGesture playerRef={playerRef} isForward={false} />{/* Touch screen only */}
+    {/* Mouse pointer only */}
+    <Gesture className="media-gesture" event="pointerup" action="toggle:paused" />
+
+    {/* Touch screen only */}
+    <Gesture className='media-gesture' event="pointerup" action="toggle:controls" onTrigger={handleControlsToggle} />
+    <SeekGesture playerRef={playerRef} />
+    <SeekGesture playerRef={playerRef} isForward={false} />
+
     <Gesture className='media-gesture' event="dblpointerup" action="toggle:fullscreen" />
   </>)
 }
