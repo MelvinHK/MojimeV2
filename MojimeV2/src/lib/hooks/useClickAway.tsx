@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 /**
- * A hook that has two callbacks for clicking on/away from an element.
+ * A hook with callbacks for clicking on/away from an element.
  */
 const useClickAway = (
   options: {

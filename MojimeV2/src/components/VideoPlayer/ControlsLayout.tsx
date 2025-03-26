@@ -22,7 +22,7 @@ function ControlsLayout() {
           <NavigateBtn type={IndexNavigation.NEXT} />
         </Controls.Group>
       }
-      <Controls.Group className="playback-container">
+      <Controls.Group className="controls-container">
         <ProgressBar />
         <div className="flex a-center gap-1">
           {!isMobile &&

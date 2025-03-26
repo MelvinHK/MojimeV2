@@ -94,7 +94,7 @@
   gap: 10px;
 }
 
-.playback-container {
+.controls-container {
   display: flex;
   flex-direction: column;
   background-image: linear-gradient(transparent, rgb(0, 0, 0, 0.5));

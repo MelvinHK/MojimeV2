@@ -49,7 +49,7 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
         {anime?.title ?? ""} - Episode {episode?.number}
       </div>
       <ControlsLayout />
-      <Gestures />
+      <Gestures playerRef={playerRef} />
     </MediaPlayer>
   )
 }

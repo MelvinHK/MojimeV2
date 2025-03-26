@@ -9,7 +9,9 @@
 }
 
 @media not (pointer: coarse) {
-  .media-gesture[action='toggle:controls'] {
+  .media-gesture[action='toggle:controls'],
+  .media-gesture[action='seek:-10'],
+  .media-gesture[action='seek:10'] {
     display: none;
   }
 }
@@ -18,4 +20,25 @@
   .media-gesture[action='toggle:paused'] {
     display: none;
   }
+}
+
+.media-gesture[action='seek:10'] {
+  left: unset;
+  right: 0;
+}
+
+.media-gesture[action='seek:-10'],
+.media-gesture[action='seek:10'] {
+  width: 35%;
+}
+
+.seek-feedback {
+  width: 100%;
+  height: 100%;
+  transition: 0.05s ease-out;
+  opacity: 0;
+  color: var(--white);
+  background: transparent;
+  border-radius: 0;
+  border: none;
 }
