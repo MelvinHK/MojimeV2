@@ -6,8 +6,8 @@ function Gestures({ playerRef }: { playerRef: RefObject<MediaPlayerInstance> }) 
   return (<>
     <Gesture className="media-gesture" event="pointerup" action="toggle:paused" />{/* Mouse pointer only */}
     <Gesture className='media-gesture' event="pointerup" action="toggle:controls" />{/* Touch screen only */}
-    <SeekGesture playerRef={playerRef} />
-    <SeekGesture playerRef={playerRef} isForward={false} />
+    <SeekGesture playerRef={playerRef} />{/* Touch screen only */}
+    <SeekGesture playerRef={playerRef} isForward={false} />{/* Touch screen only */}
     <Gesture className='media-gesture' event="dblpointerup" action="toggle:fullscreen" />
   </>)
 }
