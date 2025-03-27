@@ -1,26 +1,29 @@
+import { useContext } from 'react';
+import { Controls } from '@vidstack/react';
+
 import ProgressBar from './ProgressBar';
 import PausePlayButton from './PausePlayBtn';
 import TimeGroup from './TimeGroup';
 import FullscreenBtn from './FullscreenBtn';
 import VolumeBtn from './VolumeBtn';
-import { Controls } from '@vidstack/react';
 import QualityBtn from './QualityBtn';
 import NavigateBtn from './NavigateBtn';
-import { AnimeContext, IndexNavigation } from '../../routes/$animeId';
-import useIsMobile from '../../lib/hooks/useIsMobile';
 import SeekBtn from './SeekBtn';
-import { useContext } from 'react';
+import Gestures from './Gestures';
+
+import useIsMobile from '../../lib/hooks/useIsMobile';
+import { AnimeContext, IndexNavigation } from '../../routes/$animeId';
 
 function ControlsLayout() {
   const { isFetchingEpisode } = useContext(AnimeContext);
   const isMobile = useIsMobile();
 
-  return (
+  return (<>
     <Controls.Root className="controls-layout">
       <div className='m-auto'></div>
       {isFetchingEpisode ?
         <div className='video-status'>Loading Episode...</div>
-      :
+        :
         <div className='video-status buffer'>Buffering...</div>
       }
       {isMobile &&
@@ -50,7 +53,8 @@ function ControlsLayout() {
         </div>
       </Controls.Group>
     </Controls.Root>
-  )
+    <Gestures />
+  </>)
 }
 
 export default ControlsLayout;

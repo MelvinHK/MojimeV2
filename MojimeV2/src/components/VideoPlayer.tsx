@@ -6,7 +6,6 @@ import ControlsLayout from './VideoPlayer/ControlsLayout';
 import { useContext, useEffect, useRef } from 'react';
 import { AnimeContext } from '../routes/$animeId';
 import { PREFERRED_VOLUME_KEY } from './VideoPlayer/VolumeBtn';
-import Gestures from './VideoPlayer/Gestures';
 import { throttle } from 'lodash-es';
 
 interface VideoPlayerProps {
@@ -73,7 +72,6 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
         </div>
       }
       <ControlsLayout />
-      <Gestures playerRef={playerRef} />
     </MediaPlayer>
   )
 }

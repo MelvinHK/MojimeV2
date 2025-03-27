@@ -1,13 +1,13 @@
-import { Gesture, MediaPlayerInstance } from "@vidstack/react";
-import { RefObject } from "react";
+import { Gesture, MediaPlayerInstance, useMediaPlayer } from "@vidstack/react";
 import { useAutoResetState } from "../../lib/hooks/useAutoResetState";
 import { CONTROLS_DELAY } from "../VideoPlayer";
 
-function Gestures({ playerRef }: { playerRef: RefObject<MediaPlayerInstance> }) {
+function Gestures() {
+  const player = useMediaPlayer();
+
   const handleControlsToggle = () => {
-    const controls = playerRef.current?.controls;
-    if (controls?.showing && !playerRef.current?.paused) {
-      controls.hide(CONTROLS_DELAY);
+    if (player?.controls.showing && !player?.paused) {
+      player.controls.hide(CONTROLS_DELAY);
     }
   }
 
@@ -17,19 +17,19 @@ function Gestures({ playerRef }: { playerRef: RefObject<MediaPlayerInstance> }) 
 
     {/* Touch screen only */}
     <Gesture className='media-gesture' event="pointerup" action="toggle:controls" onTrigger={handleControlsToggle} />
-    <SeekGesture playerRef={playerRef} />
-    <SeekGesture playerRef={playerRef} isForward={false} />
+    <SeekGesture player={player} />
+    <SeekGesture player={player} isForward={false} />
 
     <Gesture className='media-gesture' event="dblpointerup" action="toggle:fullscreen" />
   </>)
 }
 
 function SeekGesture({
-  playerRef,
+  player,
   time = 10, // In seconds
   isForward = true
 }: {
-  playerRef: RefObject<MediaPlayerInstance>,
+  player: MediaPlayerInstance | null,
   time?: number,
   isForward?: boolean
 }) {
@@ -42,9 +42,9 @@ function SeekGesture({
   }
 
   const handleSubsequentSeek = () => {
-    if (playerRef?.current) {
+    if (player) {
       handleSeek();
-      playerRef.current.currentTime += isForward ? time : -time;
+      player.currentTime += isForward ? time : -time;
     }
   }
 

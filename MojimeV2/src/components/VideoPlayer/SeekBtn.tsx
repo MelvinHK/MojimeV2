@@ -1,14 +1,13 @@
-import { useMediaRemote } from "@vidstack/react";
+import { useMediaPlayer } from "@vidstack/react";
 import "../../styles/video/mediaButton.css"
 
 /**
  * @param time - In seconds 
  */
 function SeekBtn({ time }: { time: number }) {
-  const remote = useMediaRemote();
+  const player = useMediaPlayer();
 
   const handleSeek = () => {
-    const player = remote.getPlayer();
     if (player) player.currentTime += time;
   }
 
