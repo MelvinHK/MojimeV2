@@ -12,13 +12,13 @@ import SeekBtn from './SeekBtn';
 import { useContext } from 'react';
 
 function ControlsLayout() {
-  const { isFetching } = useContext(AnimeContext);
+  const { isFetchingEpisode } = useContext(AnimeContext);
   const isMobile = useIsMobile();
 
   return (
     <Controls.Root className="controls-layout">
       <div className='m-auto'></div>
-      {isFetching ?
+      {isFetchingEpisode ?
         <div className='video-status'>Loading Episode...</div>
       :
         <div className='video-status buffer'>Buffering...</div>

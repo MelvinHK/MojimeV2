@@ -29,7 +29,7 @@ interface AnimeContextType {
   hasNext: boolean;
   hasPrevious: boolean;
   handleNavigate: (type: IndexNavigation) => void;
-  isFetching: boolean;
+  isFetchingEpisode: boolean;
   prefetchEpisode: (selectedEpisode: Episode) => void;
 }
 
@@ -41,7 +41,7 @@ export const AnimeContext = createContext<AnimeContextType>({
   hasNext: false,
   hasPrevious: false,
   handleNavigate: (_type) => { },
-  isFetching: true,
+  isFetchingEpisode: true,
   prefetchEpisode: (_selectedEpisode ) => { },
 });
 
@@ -54,7 +54,7 @@ function $AnimeId() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const { data: anime, error: animeError } = useQuery({
+  const { data: anime, error: animeError, isFetching: isFetchingAnime } = useQuery({
     queryKey: ['Anime', animeId],
     queryFn: async () => {
       if (animeId) {
@@ -103,7 +103,7 @@ function $AnimeId() {
     }
   }
 
-  const { data: episodeURL, isFetching } = useQuery({
+  const { data: episodeURL, isFetching: isFetchingEpisode } = useQuery({
     queryKey: ['Episode', selectedEpisode?.number, animeId],
     queryFn: () => fetchEpisode(),
     enabled: !!anime && !!selectedEpisode,
@@ -138,6 +138,10 @@ function $AnimeId() {
     return <ErrorPage error={new Error("Error: No episodes exist (yet?)")} />;
   }
 
+  if (isFetchingAnime) {
+    return <div className='home-container'>Loading Anime...</div>
+  }
+
   return anime && episodeURL && (
     <AnimeContext.Provider
       value={{
@@ -148,7 +152,7 @@ function $AnimeId() {
         hasNext: hasNext,
         hasPrevious: hasPrevious,
         handleNavigate: handleNavigate,
-        isFetching: isFetching,
+        isFetchingEpisode: isFetchingEpisode,
         prefetchEpisode: prefetchEpisode,
       }}
     >
