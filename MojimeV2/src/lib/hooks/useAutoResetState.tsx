@@ -2,19 +2,19 @@ import { useState, useEffect, useCallback } from "react";
 import { debounce } from "lodash-es";
 
 /**
- * A hook that takes a default value, and whenever changed, reverts back to it after a set delay.
+ * Takes a default state, and whenever changed, reverts back to it after a set delay.
  * 
- * @param defaultValue - The value to reset back to.
+ * @param defaultState - The state to reset back to.
  * @param delay - Time in milliseconds until value is reset to default.
  */
-export const useAutoResetState = <T,>(defaultValue: T, delay: number) => {
-  const [state, setState] = useState(defaultValue);
+export const useAutoResetState = <T,>(defaultState: T, delay: number) => {
+  const [state, setState] = useState(defaultState);
 
   const resetToInitalValue = useCallback(
     debounce(() => {
-      setState(defaultValue);
+      setState(defaultState);
     }, delay),
-    [defaultValue, delay]
+    [defaultState, delay]
   );
 
   const setAutoResetState = (value: T) => {

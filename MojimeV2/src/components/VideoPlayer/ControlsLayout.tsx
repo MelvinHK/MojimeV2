@@ -20,7 +20,7 @@ function ControlsLayout() {
 
   return (<>
     <Controls.Root className="controls-layout">
-      <div className='m-auto'></div>
+      <div className='m-auto' />
       {isFetchingEpisode ?
         <div className='video-status'>Loading Episode...</div>
         :
@@ -46,7 +46,7 @@ function ControlsLayout() {
           <TimeGroup />
           <SeekBtn time={85} />
           <SeekBtn time={25} />
-          <div className='m-auto'></div>
+          <div className='m-auto' />
           <QualityBtn />
           {!isMobile && <VolumeBtn />}
           <FullscreenBtn />

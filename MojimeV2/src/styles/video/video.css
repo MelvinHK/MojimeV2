@@ -6,6 +6,7 @@
   max-width: 60rem;
   border-radius: var(--video-b-radius);
   position: relative;
+  overflow: hidden;
 }
 
 .media-menu {

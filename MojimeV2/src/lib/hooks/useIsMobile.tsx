@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 type Queries = "width" | "coarse";
 
 /**
- * A hook that checks if the device could be mobile using `matchMedia()`.
+ * Checks if the device could be mobile using `matchMedia()`.
  * 
  * @param queries - A string array of queries to include in the query. If no array is provided, all queries will be used.
- * @example
- * useIsMobile(["width", "coarse"]);
- * // "width": Checks if screen width is less than 480px
- * // "coarse": Checks if pointer is coarse, i.e. touch screen 
+ * @example useIsMobile(["width", "coarse"]);
+ * @queries
+ * - "width" - Checks if screen width is less than 480px
+ * - "coarse" - Checks if pointer is coarse, i.e. touch screen 
  */
 const useIsMobile = (queries: (Queries[] | undefined) = undefined) => {
   const query = buildQuery(queries);

@@ -1,12 +1,26 @@
 import '@vidstack/react/player/styles/base.css';
 import '../styles/video/video.css';
 import '../styles/video/gestures.css';
-import { MediaPlayer, MediaPlayerInstance, MediaProvider, MediaTimeUpdateEventDetail } from '@vidstack/react';
-import ControlsLayout from './VideoPlayer/ControlsLayout';
-import { useContext, useEffect, useRef } from 'react';
-import { AnimeContext } from '../routes/$animeId';
-import { PREFERRED_VOLUME_KEY } from './VideoPlayer/VolumeBtn';
+
+import { MediaPlayer, MediaPlayerInstance, MediaProvider, MediaTimeUpdateEventDetail, useMediaRemote } from '@vidstack/react';
+import { createContext, MutableRefObject, useContext, useEffect, useRef } from 'react';
 import { throttle } from 'lodash-es';
+import { animated } from '@react-spring/web';
+
+import { PREFERRED_VOLUME_KEY } from './VideoPlayer/VolumeBtn';
+import { AnimeContext, IndexNavigation } from '../routes/$animeId';
+
+import ControlsLayout from './VideoPlayer/ControlsLayout';
+import useMobileGesture from '../lib/hooks/useMobileGesture';
+import useIsMobile from '../lib/hooks/useIsMobile';
+
+interface VideoPlayerContextType {
+  isTapGesture: MutableRefObject<Boolean>
+}
+
+export const VideoPlayerContext = createContext<VideoPlayerContextType>({
+  isTapGesture: { current: false }
+});
 
 interface VideoPlayerProps {
   m3u8URL: string,
@@ -14,11 +28,18 @@ interface VideoPlayerProps {
 
 export const CONTROLS_DELAY = 2000;
 
-function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
-  const { anime, episode, currentIndex, prefetchEpisode } = useContext(AnimeContext);
-  const prefetchAllowed = useRef<boolean>(true);
+const AnimatedMediaProvider = animated(MediaProvider);
 
+function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
+  const {
+    anime, episode, currentIndex,
+    hasNext, hasPrevious,
+    prefetchEpisode, handleNavigate
+  } = useContext(AnimeContext);
+
+  const prefetchAllowed = useRef<boolean>(true);
   const playerRef = useRef<MediaPlayerInstance>(null);
+  const isCoarse = useIsMobile(["coarse"]);
 
   // Player configuration
   useEffect(() => {
@@ -41,12 +62,26 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
 
     if ((time / duration) >= 0.75 && prefetchAllowed.current) {
       prefetchAllowed.current = false;
-      const nextEpisode = anime?.episodes[currentIndex + 1];
-      if (nextEpisode) {
-        prefetchEpisode(nextEpisode);
+      if (anime && hasNext) {
+        prefetchEpisode(anime.episodes[currentIndex + 1]);
       }
     }
   }
+
+  const remote = useMediaRemote(playerRef);
+  const isTapGesture = useRef(false);
+
+  const { bindMobileGesture, x, y } = useMobileGesture({
+    onTap: () => { isTapGesture.current = true },
+    onRightDragRelease: () => {
+      if (hasPrevious) handleNavigate(IndexNavigation.PREVIOUS);
+    },
+    onLeftDragRelease: () => {
+      if (hasNext) handleNavigate(IndexNavigation.NEXT);
+    },
+    onDownDragRelease: () => remote.toggleFullscreen(),
+    onUpDragRelease: () => remote.toggleFullscreen()
+  });
 
   return (
     <MediaPlayer
@@ -65,13 +100,18 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
       autoPlay
       crossOrigin
     >
-      <MediaProvider />
+      <AnimatedMediaProvider
+        {...(isCoarse ? bindMobileGesture() : {})}
+        style={{ touchAction: "none", x, y }}
+      />
       {anime && episode &&
         <div className='video-title'>
           {anime.title} - Episode {episode.number}
         </div>
       }
-      <ControlsLayout />
+      <VideoPlayerContext.Provider value={{ isTapGesture }}>
+        <ControlsLayout />
+      </VideoPlayerContext.Provider>
     </MediaPlayer>
   )
 }

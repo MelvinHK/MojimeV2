@@ -11,11 +11,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-spring/web": "^9.7.5",
     "@tanstack/query-sync-storage-persister": "^5.69.0",
     "@tanstack/react-query": "^5.65.1",
     "@tanstack/react-query-persist-client": "^5.69.0",
     "@tanstack/react-router": "^1.98.3",
     "@types/lodash-es": "^4.17.12",
+    "@use-gesture/react": "^10.3.1",
     "@vidstack/react": "^1.12.13",
     "axios": "^1.7.9",
     "hls.js": "^1.5.20",

@@ -28,7 +28,7 @@ interface AnimeContextType {
   episode: Episode | undefined;
   hasNext: boolean;
   hasPrevious: boolean;
-  handleNavigate: (type: IndexNavigation) => void;
+  handleNavigate: (type: IndexNavigation | number) => void;
   isFetchingEpisode: boolean;
   prefetchEpisode: (selectedEpisode: Episode) => void;
 }
@@ -42,7 +42,7 @@ export const AnimeContext = createContext<AnimeContextType>({
   hasPrevious: false,
   handleNavigate: (_type) => { },
   isFetchingEpisode: true,
-  prefetchEpisode: (_selectedEpisode ) => { },
+  prefetchEpisode: (_selectedEpisode) => { },
 });
 
 function $AnimeId() {
@@ -124,10 +124,14 @@ function $AnimeId() {
   const hasPrevious = useMemo(() => currentIndex > 0, [currentIndex]);
   const hasNext = useMemo(() => !anime || currentIndex < anime.episodes.length - 1, [anime, currentIndex]);
 
-  const handleNavigate = (type: IndexNavigation) => {
+  const handleNavigate = (type: IndexNavigation | number) => {
     if (!anime) return;
-    const newIndex = type === IndexNavigation.NEXT ? currentIndex + 1 : currentIndex - 1;
-    navigate({ search: () => ({ ep: anime.episodes[newIndex].number }) });
+    if (Object.values(IndexNavigation).includes(type as IndexNavigation)) {
+      const newIndex = type === IndexNavigation.NEXT ? currentIndex + 1 : currentIndex - 1;
+      navigate({ search: () => ({ ep: anime.episodes[newIndex].number }) });
+    } else if (typeof type === "number") {
+      navigate({ search: () => ({ ep: type }) });
+    }
   }
 
   if (animeError) {
