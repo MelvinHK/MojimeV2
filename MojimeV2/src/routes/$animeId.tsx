@@ -121,6 +121,11 @@ function $AnimeId() {
     })
   }
 
+  useEffect(() => {
+    if (anime && selectedEpisode)
+      document.title = `${anime?.title} - Episode ${selectedEpisode?.number} | Mojime`
+  }, [anime, selectedEpisode])
+
   const hasPrevious = useMemo(() => currentIndex > 0, [currentIndex]);
   const hasNext = useMemo(() => !anime || currentIndex < anime.episodes.length - 1, [anime, currentIndex]);
 
