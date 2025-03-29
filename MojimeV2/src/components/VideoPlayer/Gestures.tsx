@@ -1,7 +1,7 @@
 import { Gesture, MediaPlayerInstance, useMediaPlayer, GestureWillTriggerEvent, GestureAction } from "@vidstack/react";
 import { useAutoResetState } from "../../lib/hooks/useAutoResetState";
 import { CONTROLS_DELAY, VideoPlayerContext } from "../VideoPlayer";
-import { useContext } from "react";
+import { CSSProperties, useContext } from "react";
 
 function Gestures() {
   const player = useMediaPlayer();
@@ -61,7 +61,7 @@ function SeekGesture({
     }
   }
 
-  const feedbackStyle: React.CSSProperties = {
+  const feedbackStyle: CSSProperties = {
     opacity: isSeeking ? "1" : "0",
     pointerEvents: isSeeking ? "auto" : "none",
     backgroundImage: isForward ?

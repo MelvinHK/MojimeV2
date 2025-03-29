@@ -2,10 +2,11 @@ import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getAnime, getEpisode, getProxyURL } from "../lib/api"
-import { useState, createContext, useEffect, useMemo } from 'react'
+import { useState, createContext, useEffect, useMemo, CSSProperties, FormEvent, useRef } from 'react'
 import { Anime, Episode } from '../models'
 import { AxiosError } from 'axios'
 import ErrorPage from '../components/ErrorPage'
+import '../styles/animeId.css'
 
 interface AnimeSearchParams {
   ep: number
@@ -76,12 +77,16 @@ function $AnimeId() {
       || anime.episodes[0];
   }, [anime, episodeParam]);
 
-  // Sync currentIndex with the index of selected episode.
+  const [episodeInputValue, setEpisodeInputValue] = useState(String(selectedEpisode?.number ?? "?"));
+  const episodeInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync any state that is dependent on selectedEpisode.
   useEffect(() => {
     if (!anime || !selectedEpisode) return;
     setCurrentIndex(anime.episodes.findIndex(
       episode => String(episode.number) === String(selectedEpisode.number)
     ));
+    setEpisodeInputValue(String(selectedEpisode.number));
   }, [anime, selectedEpisode]);
 
   // Update URL ep param to be selectedEpisode.number if
@@ -139,6 +144,13 @@ function $AnimeId() {
     }
   }
 
+  const handleEpisodeInput = (e: FormEvent) => {
+    e.preventDefault();
+    if (anime?.episodes.find(episode => String(episode.number) === episodeInputValue)) {
+      handleNavigate(Number(episodeInputValue));
+    }
+  }
+
   if (animeError) {
     return <ErrorPage error={animeError} />;
   }
@@ -149,6 +161,10 @@ function $AnimeId() {
 
   if (isFetchingAnime) {
     return <div className='home-container'>Loading Anime...</div>
+  }
+
+  const episodeInputStyle: CSSProperties = {
+    width: `${episodeInputValue.length + 1}ch`
   }
 
   return anime && episodeURL && (
@@ -178,9 +194,21 @@ function $AnimeId() {
           >
             Prev
           </button>
-          <div>
-            {anime.episodes[currentIndex].number} / {anime.totalEpisodes}
-          </div>
+          <form
+            onSubmit={handleEpisodeInput}
+            onClick={() => episodeInputRef.current?.focus()}
+          >
+            <input
+              ref={episodeInputRef}
+              className="episode-input"
+              style={episodeInputStyle}
+              value={episodeInputValue}
+              onChange={e => setEpisodeInputValue(e.target.value)}
+              onBlur={() => setEpisodeInputValue(String(selectedEpisode?.number))}
+              maxLength={10}
+            />
+            / {anime.totalEpisodes}
+          </form>
           <button
             className='btn'
             onClick={() => handleNavigate(IndexNavigation.NEXT)}

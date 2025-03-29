@@ -1,0 +1,17 @@
+.video-container,
+.anime-details-container {
+  display: flex;
+  justify-content: center;
+}
+
+.anime-details-container {
+  align-items: center;
+  flex-direction: column;
+}
+
+.episode-input {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  padding: 0;
+}

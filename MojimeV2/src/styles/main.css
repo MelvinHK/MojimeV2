@@ -2,11 +2,6 @@
 
 .header {
   width: 100%;
-}
-
-.header,
-.video-container,
-.anime-details-container {
   display: flex;
   justify-content: center;
 }
@@ -17,11 +12,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.anime-details-container {
-  align-items: center;
-  flex-direction: column;
 }
 
 .btn {
