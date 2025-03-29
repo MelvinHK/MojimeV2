@@ -1,3 +1,13 @@
+const CACHE_VERSION = "1.0.0";
+const CACHE_VERSION_KEY = "cacheVersion";
+
+const storedVersion = localStorage.getItem(CACHE_VERSION_KEY);
+
+if (storedVersion !== CACHE_VERSION) {
+  localStorage.clear();
+  localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
+}
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
