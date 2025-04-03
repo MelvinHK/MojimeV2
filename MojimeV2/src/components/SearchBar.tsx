@@ -68,6 +68,7 @@ function SearchBar() {
       e.preventDefault();
       toggleDropdown(false);
       inputRef.current?.blur();
+      setValue(results[selectedIndex].title);
       navigate({ to: `/${results[selectedIndex].id}` });
     }
   };
@@ -94,7 +95,10 @@ function SearchBar() {
       <Link
         key={result.id}
         to={result.id}
-        onClick={() => toggleDropdown(false)}
+        onClick={() => (
+          toggleDropdown(false),
+          setValue(result.title)
+        )}
         className={index === selectedIndex ? "selected" : ""}
         tabIndex={-1}
       >
