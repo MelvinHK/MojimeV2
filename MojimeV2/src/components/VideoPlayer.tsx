@@ -89,7 +89,7 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
       className="video-player"
       src={{
         src: m3u8URL,
-        type: 'application/vnd.apple.mpegurl'
+        type: 'application/x-mpegurl'
       }}
       volume={initVolume()}
       load="eager"
