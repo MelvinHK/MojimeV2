@@ -102,7 +102,7 @@ function SearchBar() {
     return results?.map((result, index) => (
       <Link
         key={result.id}
-        to={`/${selectedProvider as string}/${result.id}`}
+        to={selectedProvider + "/" + result.id}
         onClick={() => (
           toggleDropdown(false),
           setValue(result.title)
