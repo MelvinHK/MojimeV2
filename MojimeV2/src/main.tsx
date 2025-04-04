@@ -58,7 +58,7 @@ createRoot(document.getElementById('root')!).render(
       client={queryClient}
       persistOptions={{
         persister,
-        maxAge: Infinity
+        maxAge: 1209600000 // 2 weeks
       }}
     >
       <RouterProvider router={router} />
