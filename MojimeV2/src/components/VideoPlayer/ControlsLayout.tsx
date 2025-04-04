@@ -12,7 +12,7 @@ import SeekBtn from './SeekBtn';
 import Gestures from './Gestures';
 
 import useIsMobile from '../../lib/hooks/useIsMobile';
-import { AnimeContext, IndexNavigation } from '../../routes/$animeId';
+import { AnimeContext, IndexNavigation } from '../AnimeProvider';
 
 function ControlsLayout() {
   const { isFetchingEpisode } = useContext(AnimeContext);

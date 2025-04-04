@@ -11,20 +11,27 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AnimeIdImport } from './routes/$animeId'
 import { Route as IndexImport } from './routes/index'
+import { Route as PaheAnimeIdImport } from './routes/pahe.$animeId'
+import { Route as KaiAnimeIdImport } from './routes/kai.$animeId'
 
 // Create/Update Routes
-
-const AnimeIdRoute = AnimeIdImport.update({
-  id: '/$animeId',
-  path: '/$animeId',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PaheAnimeIdRoute = PaheAnimeIdImport.update({
+  id: '/pahe/$animeId',
+  path: '/pahe/$animeId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const KaiAnimeIdRoute = KaiAnimeIdImport.update({
+  id: '/kai/$animeId',
+  path: '/kai/$animeId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,11 +46,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/$animeId': {
-      id: '/$animeId'
-      path: '/$animeId'
-      fullPath: '/$animeId'
-      preLoaderRoute: typeof AnimeIdImport
+    '/kai/$animeId': {
+      id: '/kai/$animeId'
+      path: '/kai/$animeId'
+      fullPath: '/kai/$animeId'
+      preLoaderRoute: typeof KaiAnimeIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/pahe/$animeId': {
+      id: '/pahe/$animeId'
+      path: '/pahe/$animeId'
+      fullPath: '/pahe/$animeId'
+      preLoaderRoute: typeof PaheAnimeIdImport
       parentRoute: typeof rootRoute
     }
   }
@@ -53,37 +67,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$animeId': typeof AnimeIdRoute
+  '/kai/$animeId': typeof KaiAnimeIdRoute
+  '/pahe/$animeId': typeof PaheAnimeIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$animeId': typeof AnimeIdRoute
+  '/kai/$animeId': typeof KaiAnimeIdRoute
+  '/pahe/$animeId': typeof PaheAnimeIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/$animeId': typeof AnimeIdRoute
+  '/kai/$animeId': typeof KaiAnimeIdRoute
+  '/pahe/$animeId': typeof PaheAnimeIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$animeId'
+  fullPaths: '/' | '/kai/$animeId' | '/pahe/$animeId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$animeId'
-  id: '__root__' | '/' | '/$animeId'
+  to: '/' | '/kai/$animeId' | '/pahe/$animeId'
+  id: '__root__' | '/' | '/kai/$animeId' | '/pahe/$animeId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AnimeIdRoute: typeof AnimeIdRoute
+  KaiAnimeIdRoute: typeof KaiAnimeIdRoute
+  PaheAnimeIdRoute: typeof PaheAnimeIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AnimeIdRoute: AnimeIdRoute,
+  KaiAnimeIdRoute: KaiAnimeIdRoute,
+  PaheAnimeIdRoute: PaheAnimeIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +116,18 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/$animeId"
+        "/kai/$animeId",
+        "/pahe/$animeId"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/$animeId": {
-      "filePath": "$animeId.tsx"
+    "/kai/$animeId": {
+      "filePath": "kai.$animeId.tsx"
+    },
+    "/pahe/$animeId": {
+      "filePath": "pahe.$animeId.tsx"
     }
   }
 }

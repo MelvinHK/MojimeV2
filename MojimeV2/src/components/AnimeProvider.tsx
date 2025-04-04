@@ -1,21 +1,14 @@
-import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router'
-import VideoPlayer from "../components/VideoPlayer"
+import { useParams, useNavigate } from '@tanstack/react-router'
+import VideoPlayer from "./VideoPlayer"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { getAnime, getEpisode, getProxyURL } from "../lib/api"
+import getApiClient, { PROVIDERS } from '../lib/api/clientManager'
 import { useState, createContext, useEffect, useMemo, CSSProperties, FormEvent, useRef } from 'react'
 import { Anime, Episode } from '../models'
 import { AxiosError } from 'axios'
-import ErrorPage from '../components/ErrorPage'
+import ErrorPage from './ErrorPage'
 import '../styles/animeId.css'
-
-interface AnimeSearchParams {
-  ep: number
-}
-
-export const Route = createFileRoute('/$animeId')({
-  component: $AnimeId,
-  validateSearch: () => ({}) as AnimeSearchParams
-})
+import { KaiRoute } from '../routes/kai.$animeId'
+import { PaheRoute } from '../routes/pahe.$animeId'
 
 export enum IndexNavigation {
   NEXT = "next",
@@ -46,7 +39,13 @@ export const AnimeContext = createContext<AnimeContextType>({
   prefetchEpisode: (_selectedEpisode) => { },
 });
 
-function $AnimeId() {
+interface AnimeProviderProps {
+  Route: KaiRoute | PaheRoute,
+  provider: PROVIDERS
+}
+
+function AnimeProvider({ Route, provider }: AnimeProviderProps) {
+  const api = getApiClient(provider);
   const queryClient = useQueryClient();
 
   const { animeId } = useParams({ strict: false });
@@ -59,7 +58,7 @@ function $AnimeId() {
     queryKey: ['Anime', animeId],
     queryFn: async () => {
       if (animeId) {
-        return await getAnime(animeId);
+        return await api.getAnime(animeId);
       }
     },
     staleTime: 0,
@@ -103,8 +102,7 @@ function $AnimeId() {
 
   const fetchEpisode = async (id?: string) => {
     if (selectedEpisode) {
-      const source = await getEpisode(id ?? selectedEpisode.id);
-      return getProxyURL(source.url);
+      return await api.getEpisode(id ?? selectedEpisode.id);
     }
   }
 
@@ -221,3 +219,5 @@ function $AnimeId() {
     </AnimeContext.Provider>
   )
 }
+
+export default AnimeProvider;

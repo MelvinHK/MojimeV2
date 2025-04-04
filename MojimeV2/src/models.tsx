@@ -15,6 +15,6 @@ export interface Episode {
   number: number
 }
 
-export interface Source {
-  url: string
+export interface AnimeSearchParams {
+  ep: number
 }

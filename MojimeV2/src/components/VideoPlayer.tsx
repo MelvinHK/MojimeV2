@@ -8,7 +8,7 @@ import { throttle } from 'lodash-es';
 import { animated } from '@react-spring/web';
 
 import { PREFERRED_VOLUME_KEY } from './VideoPlayer/VolumeBtn';
-import { AnimeContext, IndexNavigation } from '../routes/$animeId';
+import { AnimeContext, IndexNavigation } from './AnimeProvider';
 
 import ControlsLayout from './VideoPlayer/ControlsLayout';
 import useMobileGesture from '../lib/hooks/useMobileGesture';
@@ -89,7 +89,7 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
       className="video-player"
       src={{
         src: m3u8URL,
-        type: 'application/x-mpegurl'
+        type: 'application/vnd.apple.mpegurl'
       }}
       volume={initVolume()}
       load="eager"

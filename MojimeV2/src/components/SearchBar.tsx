@@ -1,12 +1,20 @@
-import '../styles/searchbar/searchbar.css';
+import '../styles/searchbar.css';
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { FormEvent, useRef, useState, useEffect } from "react"
-import { getSearch } from "../lib/api";
+import { FormEvent, useRef, useState, useEffect, useMemo } from "react"
+import getApiClient, { PROVIDERS } from '../lib/api/clientManager';
 import { Link, useNavigate } from "@tanstack/react-router";
 import useClickAway from '../lib/hooks/useClickAway';
 
+const PREFERRED_PROVIDER_KEY = "preferredProvider";
+
 function SearchBar() {
+  const [selectedProvider, selectProvider] = useState(() => {
+    const preferredProvider = localStorage.getItem(PREFERRED_PROVIDER_KEY) as PROVIDERS | null;
+    return preferredProvider ?? PROVIDERS.KAI;
+  });
+  const api = useMemo(() => getApiClient(selectedProvider), [selectedProvider]);
+
   const [value, setValue] = useState("");
   const [isDropdownVisible, toggleDropdown] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -23,8 +31,8 @@ function SearchBar() {
   }, containerRef);
 
   const { data: results, refetch, isFetching } = useQuery({
-    queryKey: ['Search', value],
-    queryFn: () => getSearch(value),
+    queryKey: ['Search', value, selectedProvider],
+    queryFn: () => api.getSearch(value),
     enabled: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 5 * 60 * 1000
@@ -34,7 +42,7 @@ function SearchBar() {
     e.preventDefault();
     toggleDropdown(true);
     if (!/\S/.test(value)) return;
-    const cachedData = queryClient.getQueryData(['Search', value]);
+    const cachedData = queryClient.getQueryData(['Search', value, selectedProvider]);
     if (!cachedData) await refetch();
   }
 
@@ -69,7 +77,7 @@ function SearchBar() {
       toggleDropdown(false);
       inputRef.current?.blur();
       setValue(results[selectedIndex].title);
-      navigate({ to: `/${results[selectedIndex].id}` });
+      navigate({ to: `/${selectedProvider}/${results[selectedIndex].id}` });
     }
   };
 
@@ -94,7 +102,7 @@ function SearchBar() {
     return results?.map((result, index) => (
       <Link
         key={result.id}
-        to={result.id}
+        to={`/${selectedProvider}/${result.id}`}
         onClick={() => (
           toggleDropdown(false),
           setValue(result.title)
@@ -111,6 +119,11 @@ function SearchBar() {
     e.preventDefault();
     setValue("");
     inputRef.current?.focus();
+  }
+
+  const handleProviderSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    selectProvider(e.target.value as PROVIDERS);
+    localStorage.setItem(PREFERRED_PROVIDER_KEY, e.target.value);
   }
 
   return (
@@ -137,6 +150,21 @@ function SearchBar() {
             {"\u2715"}
           </button>
         }
+        <select
+          className="provider-select"
+          onChange={handleProviderSelect}
+          defaultValue={selectedProvider}
+        >
+          <option className="test" value="" disabled>Select Provider:</option>
+          {Object.keys(PROVIDERS).map(provider =>
+            <option
+              key={provider}
+              value={PROVIDERS[provider as keyof typeof PROVIDERS]}
+            >
+              {provider.charAt(0) + provider.substring(1).toLowerCase()}
+            </option>
+          )}
+        </select>
       </form>
       {(results || isFetching) && isDropdownVisible &&
         <div className="dropdown">
