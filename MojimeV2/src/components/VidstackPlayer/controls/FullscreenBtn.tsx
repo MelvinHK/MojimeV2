@@ -1,4 +1,4 @@
-import '../../styles/video/mediaButton.css';
+import '../../../styles/vidstack/mediaButton.css';
 import { FullscreenButton } from '@vidstack/react';
 
 function FullscreenBtn() {

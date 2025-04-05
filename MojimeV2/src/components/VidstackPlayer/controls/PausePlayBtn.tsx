@@ -1,4 +1,4 @@
-import '../../styles/video/mediaButton.css';
+import '../../../styles/vidstack/mediaButton.css';
 import { PlayButton } from "@vidstack/react";
 
 function PausePlayButton() {

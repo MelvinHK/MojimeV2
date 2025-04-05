@@ -1,4 +1,4 @@
-import '../../styles/video/video.css'
+import '../../../styles/vidstack/video.css'
 import { Time } from "@vidstack/react";
 
 function TimeGroup() {

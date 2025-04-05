@@ -1,5 +1,5 @@
 import { useMediaPlayer } from "@vidstack/react";
-import "../../styles/video/mediaButton.css"
+import "../../../styles/vidstack/mediaButton.css"
 
 /**
  * @param time - In seconds 

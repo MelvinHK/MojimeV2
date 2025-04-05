@@ -1,4 +1,4 @@
-import { AnimeContext, IndexNavigation } from '../AnimeProvider';
+import { AnimeContext, IndexNavigation } from '../../AnimeProvider';
 import { useContext } from "react";
 
 interface NavigateBtnProps {

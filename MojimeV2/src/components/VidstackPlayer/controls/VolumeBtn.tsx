@@ -1,6 +1,6 @@
-import '../../styles/video/video.css';
-import '../../styles/video/mediaSlider.css'
-import '../../styles/video/mediaButton.css'
+import "../../../styles/vidstack/video.css"
+import '../../../styles/vidstack/mediaSlider.css'
+import '../../../styles/vidstack/mediaButton.css'
 import { VolumeSlider, Menu, VolumeSliderInstance, useStore } from '@vidstack/react';
 import { useRef, useMemo } from 'react';
 

@@ -1,6 +1,6 @@
 import { Gesture, MediaPlayerInstance, useMediaPlayer, GestureWillTriggerEvent, GestureAction } from "@vidstack/react";
-import { useAutoResetState } from "../../lib/hooks/useAutoResetState";
-import { CONTROLS_DELAY, VideoPlayerContext } from "../VideoPlayer";
+import { useAutoResetState } from "../../../lib/hooks/useAutoResetState";
+import { CONTROLS_DELAY, VideoPlayerContext } from "../Vidstack";
 import { CSSProperties, useContext } from "react";
 
 function Gestures() {

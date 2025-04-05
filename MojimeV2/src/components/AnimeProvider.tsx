@@ -1,14 +1,14 @@
-import { useParams, useNavigate } from '@tanstack/react-router'
-import VideoPlayer from "./VideoPlayer"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import getApiClient, { PROVIDERS } from '../lib/api/clientManager'
-import { useState, createContext, useEffect, useMemo, CSSProperties, FormEvent, useRef } from 'react'
-import { Anime, Episode } from '../models'
-import { AxiosError } from 'axios'
-import ErrorPage from './ErrorPage'
-import '../styles/animeId.css'
-import { KaiRoute } from '../routes/kai.$animeId'
-import { PaheRoute } from '../routes/pahe.$animeId'
+import { useParams, useNavigate } from '@tanstack/react-router';
+import VideoPlayer from "./VidstackPlayer/Vidstack";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import getApiClient, { PROVIDERS } from '../lib/api/clientManager';
+import { useState, createContext, useEffect, useMemo, CSSProperties, FormEvent, useRef } from 'react';
+import { Anime, Episode } from '../models';
+import { AxiosError } from 'axios';
+import ErrorPage from './ErrorPage';
+import '../styles/animeId.css';
+import { KaiRoute } from '../routes/kai.$animeId';
+import { PaheRoute } from '../routes/pahe.$animeId';
 
 export enum IndexNavigation {
   NEXT = "next",

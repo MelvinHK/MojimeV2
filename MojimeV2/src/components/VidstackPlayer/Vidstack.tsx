@@ -1,18 +1,18 @@
 import '@vidstack/react/player/styles/base.css';
-import '../styles/video/video.css';
-import '../styles/video/gestures.css';
+import '../../styles/vidstack/video.css';
+import '../../styles/vidstack/gestures.css';
 
 import { MediaPlayer, MediaPlayerInstance, MediaProvider, MediaTimeUpdateEventDetail, useMediaRemote } from '@vidstack/react';
 import { createContext, MutableRefObject, useContext, useEffect, useRef } from 'react';
 import { throttle } from 'lodash-es';
 import { animated } from '@react-spring/web';
 
-import { PREFERRED_VOLUME_KEY } from './VideoPlayer/VolumeBtn';
-import { AnimeContext, IndexNavigation } from './AnimeProvider';
+import { PREFERRED_VOLUME_KEY } from './controls/VolumeBtn';
+import { AnimeContext, IndexNavigation } from '../AnimeProvider';
 
-import ControlsLayout from './VideoPlayer/ControlsLayout';
-import useMobileGesture from '../lib/hooks/useMobileGesture';
-import useIsMobile from '../lib/hooks/useIsMobile';
+import ControlsLayout from './controls/ControlsLayout';
+import useMobileGesture from '../../lib/hooks/useMobileGesture';
+import useIsMobile from '../../lib/hooks/useIsMobile';
 
 interface VideoPlayerContextType {
   isTapGesture: MutableRefObject<Boolean>
@@ -22,15 +22,11 @@ export const VideoPlayerContext = createContext<VideoPlayerContextType>({
   isTapGesture: { current: false }
 });
 
-interface VideoPlayerProps {
-  m3u8URL: string,
-}
-
 export const CONTROLS_DELAY = 2000;
 
 const AnimatedMediaProvider = animated(MediaProvider);
 
-function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
+function VideoPlayer({ m3u8URL }: { m3u8URL: string }) {
   const {
     anime, episode, currentIndex,
     hasNext, hasPrevious,
@@ -92,7 +88,7 @@ function VideoPlayer({ m3u8URL }: VideoPlayerProps) {
         type: 'application/x-mpegurl'
       }}
       volume={initVolume()}
-      load="eager"
+      streamType='on-demand'
       onCanPlay={() => prefetchAllowed.current = true}
       onTimeUpdate={throttle(handleTime, 1000)}
       controlsDelay={CONTROLS_DELAY}

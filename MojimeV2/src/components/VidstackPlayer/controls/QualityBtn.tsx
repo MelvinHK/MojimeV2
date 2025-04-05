@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import '../../styles/video/mediaButton.css'
-import '../../styles/video/video.css'
+import '../../../styles/vidstack/mediaButton.css'
+import '../../../styles/vidstack/video.css'
 
 import { Menu, useVideoQualityOptions } from "@vidstack/react";
 

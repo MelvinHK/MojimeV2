@@ -156,14 +156,18 @@ function SearchBar() {
           defaultValue={selectedProvider}
         >
           <option className="test" value="" disabled>Select Provider:</option>
-          {Object.keys(PROVIDERS).map(provider =>
-            <option
-              key={provider}
-              value={PROVIDERS[provider as keyof typeof PROVIDERS]}
-            >
-              {provider.charAt(0) + provider.substring(1).toLowerCase()}
-            </option>
-          )}
+          {Object.keys(PROVIDERS).map(provider => {
+            const name = PROVIDERS[provider as keyof typeof PROVIDERS];
+            return (
+              <option
+                key={provider}
+                value={name}
+              >
+                {provider.charAt(0) + provider.substring(1).toLowerCase()}
+                {name == PROVIDERS.PAHE ? " (unstable)" : ""}
+              </option>
+            )
+          })}
         </select>
       </form>
       {(results || isFetching) && isDropdownVisible &&
