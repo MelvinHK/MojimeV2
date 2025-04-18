@@ -85,7 +85,7 @@ function VideoPlayer({ m3u8URL }: { m3u8URL: string }) {
       className="video-player"
       src={{
         src: m3u8URL,
-        type: 'application/x-mpegurl'
+        type: 'application/vnd.apple.mpegurl'
       }}
       volume={initVolume()}
       streamType='on-demand'

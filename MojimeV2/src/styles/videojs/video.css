@@ -1,0 +1,9 @@
+.player-wrapper {
+  width: 60rem;
+}
+
+@media (max-width: 480px) { 
+  .video-js {
+    width: 100vw !important;
+  }
+}

@@ -154,6 +154,7 @@ function SearchBar() {
           className="provider-select"
           onChange={handleProviderSelect}
           defaultValue={selectedProvider}
+          autoComplete="off"
         >
           <option className="test" value="" disabled>Select Provider:</option>
           {Object.keys(PROVIDERS).map(provider => {
