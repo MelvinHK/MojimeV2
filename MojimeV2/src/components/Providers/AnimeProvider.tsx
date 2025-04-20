@@ -15,6 +15,7 @@ export enum IndexNavigation {
 interface AnimeContextType {
   anime: Anime | undefined;
   episode: Episode | undefined;
+  currentIndex: number;
   episodeUrl: string | undefined;
   hasNext: boolean;
   hasPrevious: boolean;
@@ -29,6 +30,7 @@ interface AnimeContextType {
 export const AnimeContext = createContext<AnimeContextType>({
   anime: undefined,
   episode: undefined,
+  currentIndex: 0,
   episodeUrl: undefined,
   hasNext: false,
   hasPrevious: false,
@@ -146,6 +148,7 @@ export function AnimeProvider({ Route, provider, children }: AnimeProviderProps)
         anime: anime,
         episode: selectedEpisode,
         episodeUrl: episodeURL,
+        currentIndex,
         hasNext: hasNext,
         hasPrevious: hasPrevious,
         handleNavigate: handleNavigate,
