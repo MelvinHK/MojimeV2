@@ -92,7 +92,7 @@ function SearchBar() {
 
   const renderDropdown = () => {
     if (isFetching) {
-      return <label>Searching...</label>;
+      return <div>Searching...</div>;
     }
 
     if (results?.length === 0) {

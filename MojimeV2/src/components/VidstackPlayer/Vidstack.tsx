@@ -8,7 +8,7 @@ import { throttle } from 'lodash-es';
 import { animated } from '@react-spring/web';
 
 import { PREFERRED_VOLUME_KEY } from './controls/VolumeBtn';
-import { AnimeContext, IndexNavigation } from '../AnimeProvider';
+import { AnimeContext, IndexNavigation } from '../Providers/AnimeProvider';
 
 import ControlsLayout from './controls/ControlsLayout';
 import useMobileGesture from '../../lib/hooks/useMobileGesture';
@@ -35,7 +35,7 @@ function VideoPlayer({ m3u8URL }: { m3u8URL: string }) {
 
   const prefetchAllowed = useRef<boolean>(true);
   const playerRef = useRef<MediaPlayerInstance>(null);
-  const isCoarse = useIsMobile(["coarse"]);
+  const isCoarse = useIsMobile(["coarse", "no-hover"]);
 
   // Player configuration
   useEffect(() => {

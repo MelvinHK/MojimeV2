@@ -7,6 +7,9 @@
 .anime-details-container {
   align-items: center;
   flex-direction: column;
+  align-self: center;
+  width: min(60rem, calc(100vw - var(--pad-x)*2));
+  position: relative
 }
 
 .episode-input {
@@ -14,4 +17,11 @@
   border: none;
   color: inherit;
   padding: 0;
+}
+
+.bookmark-btn {
+  position: absolute !important;
+  top: var(--pad-y);
+  right: 0;
+  color: gray !important;
 }

@@ -1,3 +1,5 @@
+import { PROVIDERS } from "./lib/api/clientManager"
+
 export interface SearchResult {
   id: string,
   title: string
@@ -17,4 +19,16 @@ export interface Episode {
 
 export interface AnimeSearchParams {
   ep: number
+}
+
+export interface Bookmark {
+  animeId: string,
+  title: string,
+  provider: PROVIDERS | undefined
+}
+
+export interface History {
+  animeId: string,
+  title: string,
+  provider: PROVIDERS | undefined
 }

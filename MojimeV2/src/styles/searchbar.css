@@ -49,7 +49,7 @@
 .dropdown::after {
   content: "";
   position: absolute;
-  background-color: #525252;
+  background-color: var(--light-gray);
   width: calc(100% - calc(var(--pad-x) * 2));
   height: 1px;
   top: 0;
@@ -64,7 +64,7 @@
 
 .dropdown a:hover,
 .dropdown .selected {
-  background-color: #525252;
+  background-color: var(--light-gray);
 }
 
 .clear-search-btn {

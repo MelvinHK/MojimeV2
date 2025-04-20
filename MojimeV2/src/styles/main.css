@@ -14,6 +14,65 @@
   justify-content: center;
 }
 
+.footer {
+  margin-top: auto;
+  padding-top: var(--pad-x);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.modal {
+  --modal-b-radius: 4px;
+  position: fixed;
+  background-color: var(--gray);
+  padding: var(--pad-x);
+  border-radius: var(--modal-b-radius);
+  min-width: min(400px, 100vw);
+  max-width: min(500px, 100vw);
+  z-index: 3;
+}
+
+.modal-bar {
+  display: flex;
+  width: calc(100% + var(--pad-x)*2);
+  padding: var(--pad);
+  margin: calc(-1 * var(--pad-x));
+  margin-bottom: var(--pad-y);
+  cursor: grab;
+  user-select: none;
+  background-color: #404040;
+  border-radius: var(--modal-b-radius) var(--modal-b-radius) 0 0;
+}
+
+.anime-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: gray transparent;
+  margin: calc(-1 * calc(var(--pad-y)) / 2) calc(-1 * var(--pad-x));
+}
+
+.list-result {
+  min-height: max-content;
+  padding: calc(var(--pad-y)/2) var(--pad-x);
+  overflow: hidden;
+}
+
+.list-result:hover {
+  background-color: var(--light-gray);
+}
+
+.divider {
+  height: 1px;
+  width: 100%;
+  background-color: var(--light-gray);
+}
+
 .btn {
   background-color: var(--gray);
   border: none;
@@ -21,6 +80,55 @@
   border-radius: var(--b-radius);
   padding: var(--pad);
   cursor: pointer;
+}
+
+.transparent-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 0;
+  position: relative;
+}
+
+.transparent-btn:hover {
+  text-decoration: underline;
+}
+
+.transparent-btn::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  bottom: -5px;
+  left: -8px;
+  right: -8px;
+}
+
+.x-btn {
+  background-color: transparent;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.x-btn::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: -10px;
+  right: -10px;
+}
+
+.x-btn:hover {
+  color: var(--red);
 }
 
 .ml-auto {
@@ -33,6 +141,14 @@
 
 .m-auto {
   margin: auto;
+}
+
+.mr-1ch {
+  margin-right: 1ch;
+}
+
+.ml-1ch {
+  margin-left: 1ch;
 }
 
 .flex {
@@ -55,11 +171,46 @@
   gap: 0.5rem;
 }
 
-
 .gap-1 {
   gap: 1rem;
 }
 
 .gap-1p5 {
   gap: 1.5rem;
+}
+
+.gap-y {
+  gap: var(--pad-y);
+}
+
+.gap-x {
+  gap: var(--pad-x);
+}
+
+.t-align-left {
+  text-align: left;
+}
+
+.blue {
+  color: var(--blue);
+}
+
+.bright-gray {
+  color: gray;
+}
+
+.light-gray {
+  color: var(--light-gray);
+}
+
+.gray {
+  color: var(--gray);
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.p-none {
+  pointer-events: none;
 }

@@ -19,14 +19,14 @@ interface MobileGestureProps {
 /**
  * Returns a `use-gesture` bind to attach to an element/component, enabling mobile gestures for it.
  */
-function useMobileGesture({
+const useMobileGesture = ({
   onTap = () => { },
   onRightDragRelease = () => { },
   onLeftDragRelease = () => { },
   onUpDragRelease = () => { },
   onDownDragRelease = () => { },
   options = {}
-}: MobileGestureProps = {}) {
+}: MobileGestureProps = {}) => {
   const {
     dragReleaseThreshold = 70,
     bounds = {

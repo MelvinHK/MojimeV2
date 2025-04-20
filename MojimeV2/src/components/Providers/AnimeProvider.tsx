@@ -1,14 +1,11 @@
 import { useParams, useNavigate } from '@tanstack/react-router';
-import VideoPlayer from "./VidstackPlayer/Vidstack";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import getApiClient, { PROVIDERS } from '../lib/api/clientManager';
-import { useState, createContext, useEffect, useMemo, CSSProperties, FormEvent, useRef } from 'react';
-import { Anime, Episode } from '../models';
+import getApiClient, { PROVIDERS } from '../../lib/api/clientManager';
+import { useState, createContext, useEffect, useMemo, useContext, ReactNode } from 'react';
+import { Anime, Episode } from '../../models';
 import { AxiosError } from 'axios';
-import ErrorPage from './ErrorPage';
-import '../styles/animeId.css';
-import { KaiRoute } from '../routes/kai.$animeId';
-import { PaheRoute } from '../routes/pahe.$animeId';
+import { KaiRoute } from '../../routes/kai.$animeId';
+import { PaheRoute } from '../../routes/pahe.$animeId';
 
 export enum IndexNavigation {
   NEXT = "next",
@@ -17,34 +14,39 @@ export enum IndexNavigation {
 
 interface AnimeContextType {
   anime: Anime | undefined;
-  currentIndex: number;
-  setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
   episode: Episode | undefined;
+  episodeUrl: string | undefined;
   hasNext: boolean;
   hasPrevious: boolean;
   handleNavigate: (type: IndexNavigation | number) => void;
   isFetchingEpisode: boolean;
   prefetchEpisode: (selectedEpisode: Episode) => void;
+  animeError: Error | null;
+  isFetchingAnime: boolean;
+  provider: PROVIDERS | undefined
 }
 
 export const AnimeContext = createContext<AnimeContextType>({
   anime: undefined,
-  currentIndex: 0,
-  setCurrentIndex: () => 0,
   episode: undefined,
+  episodeUrl: undefined,
   hasNext: false,
   hasPrevious: false,
   handleNavigate: (_type) => { },
   isFetchingEpisode: true,
   prefetchEpisode: (_selectedEpisode) => { },
+  animeError: null,
+  isFetchingAnime: true,
+  provider: undefined,
 });
 
 interface AnimeProviderProps {
   Route: KaiRoute | PaheRoute,
-  provider: PROVIDERS
+  provider: PROVIDERS,
+  children: ReactNode
 }
 
-function AnimeProvider({ Route, provider }: AnimeProviderProps) {
+export function AnimeProvider({ Route, provider, children }: AnimeProviderProps) {
   const api = getApiClient(provider);
   const queryClient = useQueryClient();
 
@@ -76,16 +78,12 @@ function AnimeProvider({ Route, provider }: AnimeProviderProps) {
       || anime.episodes[0];
   }, [anime, episodeParam]);
 
-  const [episodeInputValue, setEpisodeInputValue] = useState(String(selectedEpisode?.number ?? "?"));
-  const episodeInputRef = useRef<HTMLInputElement>(null);
-
   // Sync any state that is dependent on selectedEpisode.
   useEffect(() => {
     if (!anime || !selectedEpisode) return;
     setCurrentIndex(anime.episodes.findIndex(
       episode => String(episode.number) === String(selectedEpisode.number)
     ));
-    setEpisodeInputValue(String(selectedEpisode.number));
   }, [anime, selectedEpisode]);
 
   // Update URL ep param to be selectedEpisode.number if
@@ -142,82 +140,25 @@ function AnimeProvider({ Route, provider }: AnimeProviderProps) {
     }
   }
 
-  const handleEpisodeInput = (e: FormEvent) => {
-    e.preventDefault();
-    if (anime?.episodes.find(episode => String(episode.number) === episodeInputValue)) {
-      handleNavigate(Number(episodeInputValue));
-    }
-  }
-
-  if (animeError) {
-    return <ErrorPage error={animeError} />;
-  }
-
-  if (anime?.episodes.length === 0) {
-    return <ErrorPage error={new Error("Error: No episodes exist (yet?)")} />;
-  }
-
-  if (isFetchingAnime) {
-    return <div className='home-container'>Loading Anime...</div>
-  }
-
-  const episodeInputStyle: CSSProperties = {
-    width: `${episodeInputValue.length + 1}ch`
-  }
-
-  return anime && episodeURL && (
+  return (
     <AnimeContext.Provider
       value={{
         anime: anime,
-        currentIndex: currentIndex,
-        setCurrentIndex: setCurrentIndex,
         episode: selectedEpisode,
+        episodeUrl: episodeURL,
         hasNext: hasNext,
         hasPrevious: hasPrevious,
         handleNavigate: handleNavigate,
         isFetchingEpisode: isFetchingEpisode,
         prefetchEpisode: prefetchEpisode,
+        animeError,
+        isFetchingAnime,
+        provider
       }}
     >
-      <div className='video-container'>
-        <VideoPlayer m3u8URL={episodeURL} />
-      </div>
-      <div className='anime-details-container'>
-        <p>{anime.title}</p>
-        <div className='flex gap-1 a-center'>
-          <button
-            className='btn'
-            onClick={() => handleNavigate(IndexNavigation.PREVIOUS)}
-            disabled={!hasPrevious}
-          >
-            Prev
-          </button>
-          <form
-            onSubmit={handleEpisodeInput}
-            onClick={() => episodeInputRef.current?.focus()}
-          >
-            <input
-              ref={episodeInputRef}
-              className="episode-input"
-              style={episodeInputStyle}
-              value={episodeInputValue}
-              onChange={e => setEpisodeInputValue(e.target.value)}
-              onBlur={() => setEpisodeInputValue(String(selectedEpisode?.number))}
-              maxLength={10}
-            />
-            / {anime.totalEpisodes}
-          </form>
-          <button
-            className='btn'
-            onClick={() => handleNavigate(IndexNavigation.NEXT)}
-            disabled={!hasNext}
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      {children}
     </AnimeContext.Provider>
   )
 }
 
-export default AnimeProvider;
+export const useAnime = () => useContext(AnimeContext);

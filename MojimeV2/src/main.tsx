@@ -23,6 +23,8 @@ import { compress, decompress } from 'lz-string'
 
 import { routeTree } from './routeTree.gen'
 import ErrorPage from './components/ErrorPage'
+import { BookmarksProvider } from './components/Providers/BookmarksProvider';
+import { HistoryProvider } from './components/Providers/HistoryProvider';
 
 const router = createRouter({
   routeTree,
@@ -44,9 +46,10 @@ const queryClient = new QueryClient({
   },
 });
 
+export const OFFLINE_CACHE_KEY = "offlineCache";
 const persister = createSyncStoragePersister({
   storage: window.localStorage,
-  key: "offlineCache",
+  key: OFFLINE_CACHE_KEY,
   serialize: data => compress(JSON.stringify(data)),
   deserialize: data => JSON.parse(decompress(data)),
   retry: removeOldestQuery
@@ -61,7 +64,11 @@ createRoot(document.getElementById('root')!).render(
         maxAge: 1209600000 // 2 weeks
       }}
     >
-      <RouterProvider router={router} />
+      <HistoryProvider>
+        <BookmarksProvider>
+          <RouterProvider router={router} />
+        </BookmarksProvider>
+      </HistoryProvider>
     </PersistQueryClientProvider>
   </StrictMode>,
 );

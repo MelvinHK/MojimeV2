@@ -7,7 +7,7 @@ import { debounce } from "lodash-es";
  * @param defaultState - The state to reset back to.
  * @param delay - Time in milliseconds until value is reset to default.
  */
-export const useAutoResetState = <T,>(defaultState: T, delay: number) => {
+const useAutoResetState = <T,>(defaultState: T, delay: number) => {
   const [state, setState] = useState(defaultState);
 
   const resetToInitalValue = useCallback(
@@ -30,3 +30,5 @@ export const useAutoResetState = <T,>(defaultState: T, delay: number) => {
 
   return [state, setAutoResetState] as const;
 };
+
+export default useAutoResetState

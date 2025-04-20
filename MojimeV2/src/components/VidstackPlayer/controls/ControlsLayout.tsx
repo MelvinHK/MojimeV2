@@ -12,11 +12,12 @@ import SeekBtn from './SeekBtn';
 import Gestures from './Gestures';
 
 import useIsMobile from '../../../lib/hooks/useIsMobile';
-import { AnimeContext, IndexNavigation } from '../../AnimeProvider';
+import { AnimeContext, IndexNavigation } from '../../Providers/AnimeProvider';
 
 function ControlsLayout() {
   const { isFetchingEpisode } = useContext(AnimeContext);
-  const isMobile = useIsMobile();
+  const isMobileWidth = useIsMobile(["width"]);
+  const isCoarse = useIsMobile(["coarse", "no-hover"]);
 
   return (<>
     <Controls.Root className="controls-layout">
@@ -26,7 +27,7 @@ function ControlsLayout() {
         :
         <div className='video-status buffer'>Buffering...</div>
       }
-      {isMobile &&
+      {(isMobileWidth || isCoarse) &&
         <Controls.Group className='mobile-playback-container'>
           <NavigateBtn type={IndexNavigation.PREVIOUS} />
           <PausePlayButton />
@@ -36,7 +37,7 @@ function ControlsLayout() {
       <Controls.Group className="controls-container">
         <ProgressBar />
         <div className="flex a-center gap-1">
-          {!isMobile &&
+          {(!isMobileWidth && !isCoarse) &&
             <div className='flex a-center gap-1p5'>
               <NavigateBtn type={IndexNavigation.PREVIOUS} />
               <PausePlayButton />
@@ -48,7 +49,7 @@ function ControlsLayout() {
           <SeekBtn time={25} />
           <div className='m-auto' />
           <QualityBtn />
-          {!isMobile && <VolumeBtn />}
+          {!isMobileWidth && <VolumeBtn />}
           <FullscreenBtn />
         </div>
       </Controls.Group>

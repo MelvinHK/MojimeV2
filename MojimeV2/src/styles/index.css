@@ -2,9 +2,11 @@
 
 :root {
   --white: rgb(238, 238, 238);
+  --light-gray: #525252;
   --gray: #353535;
   --black: #1a1a1a;
   --blue: #646cff;
+  --red: #ee5050;
 
   --pad-y: 0.8rem;
   --pad-x: 1.2rem;
@@ -18,8 +20,9 @@
   background-color: var(--black);
 }
 
-html, body {
-  min-height: 100vh;
+html,
+body {
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
