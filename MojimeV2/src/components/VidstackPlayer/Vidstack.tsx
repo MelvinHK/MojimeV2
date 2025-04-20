@@ -3,12 +3,12 @@ import '../../styles/vidstack/video.css';
 import '../../styles/vidstack/gestures.css';
 
 import { MediaPlayer, MediaPlayerInstance, MediaProvider, MediaTimeUpdateEventDetail, useMediaRemote } from '@vidstack/react';
-import { createContext, MutableRefObject, useContext, useEffect, useRef } from 'react';
+import { createContext, MutableRefObject, useEffect, useRef } from 'react';
 import { throttle } from 'lodash-es';
 import { animated } from '@react-spring/web';
 
 import { PREFERRED_VOLUME_KEY } from './controls/VolumeBtn';
-import { AnimeContext, IndexNavigation } from '../Providers/AnimeProvider';
+import { IndexNavigation, useAnime } from '../Providers/AnimeProvider';
 
 import ControlsLayout from './controls/ControlsLayout';
 import useMobileGesture from '../../lib/hooks/useMobileGesture';
@@ -31,7 +31,7 @@ function VideoPlayer({ m3u8URL }: { m3u8URL: string }) {
     anime, episode, currentIndex,
     hasNext, hasPrevious,
     prefetchEpisode, handleNavigate
-  } = useContext(AnimeContext);
+  } = useAnime();
 
   const prefetchAllowed = useRef<boolean>(true);
   const playerRef = useRef<MediaPlayerInstance>(null);

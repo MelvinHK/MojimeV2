@@ -1,12 +1,11 @@
-import { AnimeContext, IndexNavigation } from '../../Providers/AnimeProvider';
-import { useContext } from "react";
+import { IndexNavigation, useAnime } from '../../Providers/AnimeProvider';
 
 interface NavigateBtnProps {
   type: IndexNavigation;
 }
 
 function NavigateBtn({ type }: NavigateBtnProps) {
-  const { handleNavigate, hasNext, hasPrevious } = useContext(AnimeContext);
+  const { handleNavigate, hasNext, hasPrevious } =  useAnime();
 
   return (
     <button

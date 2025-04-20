@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { Controls } from '@vidstack/react';
 
 import ProgressBar from './ProgressBar';
@@ -12,10 +11,10 @@ import SeekBtn from './SeekBtn';
 import Gestures from './Gestures';
 
 import useIsMobile from '../../../lib/hooks/useIsMobile';
-import { AnimeContext, IndexNavigation } from '../../Providers/AnimeProvider';
+import { IndexNavigation, useAnime } from '../../Providers/AnimeProvider';
 
 function ControlsLayout() {
-  const { isFetchingEpisode } = useContext(AnimeContext);
+  const { isFetchingEpisode } = useAnime();
   const isMobileWidth = useIsMobile(["width"]);
   const isCoarse = useIsMobile(["coarse", "no-hover"]);
 
