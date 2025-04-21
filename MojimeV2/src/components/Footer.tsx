@@ -1,18 +1,15 @@
-import useModal from "../lib/hooks/useModal";
+import { useModal } from "./Providers/ModalProvider";
 import ListModal from "./Modals/ListModal";
 import SettingsModal from "./Modals/SettingsModal";
 
 function Footer() {
-  const { modal: listModal, setShowModal: showListModal } = useModal(<ListModal />, "Lists");
-  const { modal: settingsModal, setShowModal: showSettingsModal } = useModal(<SettingsModal />, "Settings");
+  const { openModal } = useModal();
 
   return (<>
     <div className="footer">
-      <BracketButton value="Lists" onClick={() => showListModal(true)} />
-      <BracketButton value="Settings" onClick={() => showSettingsModal(true)} />
+      <BracketButton value="Lists" onClick={() => openModal(<ListModal />, "Lists")} />
+      <BracketButton value="Settings" onClick={() => openModal(<SettingsModal />, "Settings")} />
     </div>
-    {listModal}
-    {settingsModal}
   </>)
 }
 

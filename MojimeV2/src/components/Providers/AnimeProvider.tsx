@@ -13,7 +13,7 @@ export enum IndexNavigation {
   PREVIOUS = "previous"
 };
 
-interface AnimeContextType {
+export const AnimeContext = createContext<{
   anime: Anime | undefined;
   episode: Episode | undefined;
   currentIndex: number;
@@ -26,9 +26,7 @@ interface AnimeContextType {
   animeError: Error | null;
   isFetchingAnime: boolean;
   provider: PROVIDERS | undefined
-}
-
-export const AnimeContext = createContext<AnimeContextType>({
+}>({
   anime: undefined,
   episode: undefined,
   currentIndex: 0,

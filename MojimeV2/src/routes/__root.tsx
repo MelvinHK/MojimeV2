@@ -1,7 +1,7 @@
-import * as React from 'react'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import SearchBar from '../components/SearchBar'
 import Footer from '../components/Footer'
+import ModalProvider from '../components/Providers/ModalProvider'
 export const Route = createRootRoute({
   component: Root,
 })
@@ -9,12 +9,12 @@ export const Route = createRootRoute({
 function Root() {
 
   return (
-    <React.Fragment>
+    <ModalProvider>
       <div className="header">
         <SearchBar />
       </div>
       <Outlet />
       <Footer />
-    </React.Fragment>
+    </ModalProvider>
   )
 }
