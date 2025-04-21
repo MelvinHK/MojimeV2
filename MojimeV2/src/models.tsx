@@ -30,5 +30,7 @@ export interface Bookmark {
 export interface History {
   animeId: string,
   title: string,
+  /** Most recently watched episode's index. */
+  episodeIndex: number,
   provider: PROVIDERS | undefined
 }

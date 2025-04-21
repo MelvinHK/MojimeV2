@@ -10,7 +10,7 @@ import { useHistory } from "./Providers/HistoryProvider";
 
 function WatchLayout() {
   const {
-    anime, episode, episodeUrl,
+    anime, episode, episodeUrl, currentIndex,
     handleNavigate, hasPrevious, hasNext,
     animeError, isFetchingAnime, provider
   } = useAnime();
@@ -21,19 +21,23 @@ function WatchLayout() {
   const episodeInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!anime) return;
-    addHistory({ animeId: anime.id, title: anime.title, provider: provider });
-  }, [anime]);
+    if (!anime || !provider) return;
+    addHistory({
+      animeId: anime.id,
+      title: anime.title,
+      episodeIndex: currentIndex,
+      provider: provider
+    });
+  }, [anime, currentIndex, provider]);
 
   useEffect(() => {
-    if (!anime || !anime || !episode) return;
+    if (!anime || !episode) return;
     setEpisodeInputValue(String(episode.number));
-  }, [anime, anime, episode]);
-
+  }, [anime, episode]);
 
   const handleEpisodeInput = (e: FormEvent) => {
     e.preventDefault();
-    if (anime?.episodes.find(episode => String(episode.number) === episodeInputValue)) {
+    if (anime?.episodes.some(episode => String(episode.number) === episodeInputValue)) {
       handleNavigate(Number(episodeInputValue));
     }
   }

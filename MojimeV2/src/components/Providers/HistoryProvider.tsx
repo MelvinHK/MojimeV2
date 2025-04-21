@@ -2,7 +2,7 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { History } from "../../models";
 import { ReactNode } from "@tanstack/react-router";
 
-const HISTORY_KEY = "history";
+export const HISTORY_KEY = "history";
 
 const HistoryContext = createContext<{
   history: History[];
@@ -33,11 +33,9 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const addHistory = (newEntry: History) => {
-    let newHistory;
-
-    newHistory = history.some(h => h.animeId === newEntry.animeId)
+    const newHistory = history.some(h => h.animeId === newEntry.animeId)
       ? [newEntry, ...history.filter(h => h.animeId !== newEntry.animeId)]
-      : newHistory = [newEntry, ...history];
+      : [newEntry, ...history];
 
     localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
     setHistory(newHistory);

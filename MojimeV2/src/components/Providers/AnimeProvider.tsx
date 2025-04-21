@@ -2,10 +2,11 @@ import { useParams, useNavigate } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import getApiClient, { PROVIDERS } from '../../lib/api/clientManager';
 import { useState, createContext, useEffect, useMemo, useContext, ReactNode } from 'react';
-import { Anime, Episode } from '../../models';
+import { Anime, Episode, History } from '../../models';
 import { AxiosError } from 'axios';
 import { KaiRoute } from '../../routes/kai.$animeId';
 import { PaheRoute } from '../../routes/pahe.$animeId';
+import { HISTORY_KEY } from './HistoryProvider';
 
 export enum IndexNavigation {
   NEXT = "next",
@@ -72,12 +73,27 @@ export function AnimeProvider({ Route, provider, children }: AnimeProviderProps)
     }
   });
 
-  // Derive selected episode from URL param.
-  // If there's no ep param or no match is found, default to the first episode.
+  // Episode selection is derived from the "ep" URL param.
+  // If there's no param or no match is found, default to the first episode,
+  // or the most recently watched episode if found in history storage.
   const selectedEpisode = useMemo(() => {
     if (!anime) return undefined;
-    return anime.episodes.find(episode => episode.number === episodeParam)
-      || anime.episodes[0];
+
+    const episode = anime.episodes.find(episode => episode.number === episodeParam);
+    if (episode) {
+      return episode;
+    }
+
+    const stored = localStorage.getItem(HISTORY_KEY);
+    if (stored) {
+      const history: History[] = JSON.parse(stored);
+      const match = history.find(h => h.animeId === anime.id);
+      if (match) {
+        return anime.episodes[match.episodeIndex];
+      }
+    }
+
+    return anime.episodes[0];
   }, [anime, episodeParam]);
 
   // Sync any state that is dependent on selectedEpisode.

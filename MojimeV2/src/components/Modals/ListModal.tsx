@@ -67,7 +67,7 @@ function Bookmarks() {
             to={b.provider + "/" + b.animeId}
           >
             {b.title}
-            <button className="ml-auto x-btn" onClick={(e) => {
+            <button className="ml-auto bright-gray x-btn" onClick={(e) => {
               e.preventDefault();
               removeBookmark(b.animeId);
             }}>
