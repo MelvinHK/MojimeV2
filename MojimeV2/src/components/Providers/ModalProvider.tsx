@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, createContext, useContext } from 'react';
+import { useState, useEffect, useRef, createContext, useContext, ReactNode, MutableRefObject } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useGesture } from '@use-gesture/react';
@@ -6,8 +6,10 @@ import { useSpring, animated } from '@react-spring/web';
 
 import useWindowSize from '../../lib/hooks/useWindowSize';
 
+const MODAL_POSITIONS_KEY = "modalPositions";
+
 type ModalData = {
-  content: React.ReactNode;
+  content: ReactNode;
   title: string;
 };
 
@@ -17,18 +19,21 @@ type ModalPositions = {
 
 const ModalContext = createContext<{
   /** @important Title must be unique as it acts as the modal's ID. */
-  openModal: (content: React.ReactNode, title: string) => void;
+  openModal: (content: ReactNode, title: string) => void;
   closeModal: (id: string) => void;
 }>({
   openModal: () => { },
   closeModal: () => { },
 });
 
-const ModalProvider = ({ children }: { children: React.ReactNode }) => {
+const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [modals, setModals] = useState<ModalData[]>([]);
-  const modalPositions = useRef<ModalPositions>({});
+  const modalPositions = useRef<ModalPositions>((() => {
+    const stored = localStorage.getItem(MODAL_POSITIONS_KEY);
+    return stored ? JSON.parse(stored) : {};
+  })());
 
-  const openModal = (content: React.ReactNode, title: string) => {
+  const openModal = (content: ReactNode, title: string) => {
     if (modals.some(m => m.title === title)) return;
     setModals(prev => [...prev, { content, title }]);
   };
@@ -37,16 +42,34 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     setModals(prev => prev.filter(modal => modal.title !== title));
   };
 
+  const bringToFront = (title: string) => {
+    setModals(prev => {
+      const focused = prev.find((modal) => modal.title === title);
+      return focused
+        ? [...prev.filter((modal) => modal.title !== title), focused]
+        : prev;
+    });
+  }
+
+  const storePositions = () => {
+    localStorage.setItem(MODAL_POSITIONS_KEY, JSON.stringify(modalPositions.current));
+  }
+
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
-      {modals.map(m => (
+      {modals.map((m, index) => (
         <DraggableModal
           key={m.title}
           title={m.title}
           position={modalPositions.current[m.title]}
+          zIndex={1000 + index}
           onClose={() => closeModal(m.title)}
-          onMoved={p => modalPositions.current[m.title] = p.current}
+          onMoved={p => (
+            modalPositions.current[m.title] = p.current,
+            storePositions()
+          )}
+          onInteract={() => bringToFront(m.title)}
         >
           {m.content}
         </DraggableModal>
@@ -63,17 +86,22 @@ const DraggableModal = ({
   title,
   children,
   position,
+  zIndex,
   onClose,
-  onMoved
+  onMoved,
+  onInteract
 }: {
   title: string;
-  children: React.ReactNode;
-  position?: [number, number];
+  children: ReactNode;
+  position: [number, number];
+  zIndex: number;
   onClose: () => void;
-  onMoved?: (positionRef: React.MutableRefObject<[number, number]>) => void;
+  onMoved: (positionRef: MutableRefObject<[number, number]>) => void;
+  onInteract: () => void;
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const positionRef = useRef<[number, number]>(position ?? [0, 0]);
+  const positionRef = useRef(position ?? [0, 0]);
+
   const [{ x, y }, api] = useSpring(() => ({ x: position?.[0] ?? 0, y: position?.[1] ?? 0 }));
   const windowSize = useWindowSize();
 
@@ -114,7 +142,7 @@ const DraggableModal = ({
 
   const handlePositionData = (x: number, y: number) => {
     positionRef.current = [x, y];
-    onMoved?.(positionRef);
+    onMoved(positionRef);
   }
 
   return createPortal(
@@ -122,7 +150,10 @@ const DraggableModal = ({
       ref={modalRef}
       id={title}
       className="modal"
-      style={{ x, y }}
+      style={{ x, y, zIndex }}
+      onFocus={onInteract}
+      onGotPointerCapture={onInteract}
+      onClick={onInteract}
     >
       <div {...bindDrag()} className="modal-bar" style={{ touchAction: "none" }}>
         <div>{title}</div>

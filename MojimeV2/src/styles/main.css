@@ -31,7 +31,7 @@
   border-radius: var(--modal-b-radius);
   min-width: min(400px, 100vw);
   max-width: min(500px, 100vw);
-  z-index: 3;
+  z-index: 1000;
 }
 
 .modal-bar {
